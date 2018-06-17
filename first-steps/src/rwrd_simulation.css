@@ -1,0 +1,17 @@
+.stzhMkWidgetCanvas { 
+  border: 1px solid red 
+}
+
+.stzhMkWidgetTitle { 
+  color: #4C4C4C;
+  position: relative;
+}
+
+.stzhMkInfo { 
+  display: inline-block;
+  height: 16px; width: 16px 
+} 
+
+.stzhMkWidgetInhalt { 
+  border: 1px solid green 
+} 
