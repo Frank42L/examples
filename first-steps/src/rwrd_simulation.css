@@ -1,17 +1,83 @@
-.stzhMkWidgetCanvas { 
-  border: 1px solid red 
+html {
+  background: #fff;
 }
 
-.stzhMkWidgetTitle { 
-  color: #4C4C4C;
+body {
+  font-family: HelveticaNeueLTW01_55Roman,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 1rem;
+  line-height: 1.6875;
+  color: #666;
+  hyphens: manual;
+  overflow-x: hidden;
+}
+
+div {
+  display : block;
+}
+
+.dashboardcard { 
+  border: 1px solid red;
   position: relative;
+  background-color: #fff;
 }
 
-.stzhMkInfo { 
-  display: inline-block;
+.dashboardcard .dashboardcardheader { 
+  background-color: #49abed;
+  position: relative;
+  margin: 0 1.25rem;
+  cursor: pointer;
+  display: block;
+  border: none;
+}
+
+.dashboardcardheader .dashboardcardheadertext { 
+  padding: 1.25rem 4.6875rem 1.25rem 0;
+}
+
+.dashboardcardheader .dashboardcardheadertext .title{
+  color: #4C4C4C;
+  position: relative;  
+}
+
+.dashboardcardheader .dashboardcardheadertext .trigger_icon { 
+  cursor: pointer;
+  width: 29px;
+  height: 29px;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+}
+
+.card_body { 
   height: 16px; width: 16px 
 } 
 
-.stzhMkWidgetInhalt { 
+.tootltip_group { 
+  border: 1px solid green;
+  position: static;
+  border-bottom: 1px solid #dfdfdf;
+  margin: 0 1.25rem;
+  padding-bottom: .9375rem;
+} 
+
+.card_content { 
   border: 1px solid green 
 } 
+
+.card_content .card_content_section {
+  padding: 1.25rem;
+}
+
+.card_footer { 
+  border: 1px solid green;
+  padding: 0 1.25rem 1.875rem;
+} 
+
+.mod_button { 
+  border: 1px solid green;
+  height: 45px;
+} 
+
+.label {
+
+}

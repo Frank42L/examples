@@ -25,16 +25,56 @@ class StzhMkWidgetCanvas extends HTMLElement {
     }
 
     createTemplate(shadow) {
-        var wrapper = document.createElement('span');
+        var appDashboardItem = document.createElement('app-dashboard-item');
+        appDashboardItem.setAttribute('class', 'mod_dashboardcard');
+
+        var appWidgetContainer = document.createElement('app-widget-container');
+        appWidgetContainer.setAttribute('class', 'dashboardcard');
+        appDashboardItem.appendChild(appWidgetContainer);
+
+        var appWidgetContainer1 = document.createElement('div');
+        appWidgetContainer1.setAttribute('class', 'dashboardcard');
+        appWidgetContainer.appendChild(appWidgetContainer1);
+
+        var appWidgetHeader = document.createElement('div');
+        appWidgetHeader.setAttribute('class', 'dashboardcardheader');
+        appWidgetContainer1.appendChild(appWidgetHeader);
+
+        var appWidgetHeaderText = document.createElement('div');
+        appWidgetHeaderText.setAttribute('class', 'dashboardcardheadertext');
+        appWidgetHeader.appendChild(appWidgetHeaderText);
+        
+        var appWidgetTitle = document.createElement('h2');
+        appWidgetTitle.setAttribute('class', 'title');
+        appWidgetTitle.textContent = this.widgetTitle;
+        appWidgetHeaderText.appendChild(appWidgetTitle);
+
+        var appWidgetSubTitle = document.createElement('p');
+        appWidgetSubTitle.setAttribute('class', 'subtitle');
+        appWidgetSubTitle.textContent = this.subTitle;
+        appWidgetHeaderText.appendChild(appWidgetSubTitle);
+
+        var appWidgetTriggerIcon = document.createElement('div');
+        appWidgetTriggerIcon.setAttribute('class', 'trigger_icon');
+        appWidgetHeader.appendChild(appWidgetTriggerIcon);
+
+        var appWidgetContent = document.createElement('div');
+        appWidgetContent.setAttribute('class', 'card_body');
+        appWidgetContent.textContent = this.textContent;
+        appWidgetContainer1.appendChild(appWidgetContent);
+
+
+
+        var wrapper = document.createElement('div');
         wrapper.setAttribute('class', 'stzhMkWidgetTitle');
         wrapper.textContent = this.widgetTitle;
         wrapper.setAttribute('class', 'stzhMkWidgetCanvas');
         
-        var countMarker = document.createElement('span');
+        var countMarker = document.createElement('div');
         countMarker.setAttribute('class', 'stzhMkCountMarker');
         countMarker.setAttribute('tabIndex', 0);
 
-        var info = document.createElement('span');
+        var info = document.createElement('div');
         info.setAttribute('class', 'stzhMkInfo');
         info.textContent = this.subTitle;
 
@@ -43,13 +83,14 @@ class StzhMkWidgetCanvas extends HTMLElement {
         img.src = imgUrl;
         countMarker.appendChild(img);
 
-        var inhalt = document.createElement('span');
+        var inhalt = document.createElement('div');
         inhalt.setAttribute('class', 'stzhMkWidgetInhalt');
         inhalt.textContent = this.textContent;
 
         var style = document.createElement('style');
         style.textContent = '@import url("rwrd_simulation.css");';
         shadow.appendChild(style);
+        shadow.appendChild(appDashboardItem);
         shadow.appendChild(wrapper);
         wrapper.appendChild(countMarker);
         wrapper.appendChild(info);
