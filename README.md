@@ -19,4 +19,20 @@ Ablauf:
   oder noch besser: 
   - Set push.default = current, dann geht git push -u
 
+Aktuell empfohlener Ablauf:
+- git checkout -b XXXX
+- ... edit ...
+- git add --all
+- git commit -m "blabla"
+- git push -u origin XXXX 
+  (beim zweiten mal reicht git push)
+-----
+- git fetch origin
+- git checkout -b XXXX origin/XXXX
+  (falls derselbe Mitarbeiter reicht: git checkout XXXX)
+- merge master
+----
+- git checkout master
+- git merge --no-ff XXXX
+- git push origin master
 
