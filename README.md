@@ -19,6 +19,8 @@ Ablauf:
   oder noch besser: 
   - Set push.default = current, dann geht git push -u
 
+-----
+-----
 Aktuell empfohlener Ablauf:
 - git checkout -b XXXX
 - ... edit ...
@@ -35,4 +37,6 @@ Aktuell empfohlener Ablauf:
 - git checkout master
 - git merge --no-ff XXXX
 - git push origin master
+-----
+- git push origin --delete XXXX
 
