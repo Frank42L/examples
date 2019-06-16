@@ -2,28 +2,50 @@
 <html>
 <head>
     <title>First-Steps (Frank42L)</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="rwrd_simulation.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style_core_elements.css">
+    <link rel="stylesheet" href="assets/css/style_mk.css">
+    <link rel="stylesheet" href="assets/css/rwrd_simulation.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
-    <stzh-mk-dashboard >
-            Mein Konto Dashboard
-        <stzh-mk-widget-canvas title='News' subTitle='Alle News'>
-            Widget 1
-        </stzh-mk-widget-canvas>
-        <stzh-mk-widget-canvas title='Meine Schule' subTitle='Riedhof-Pünten'>
-            Widget 2
-        </stzh-mk-widget-canvas>
+
+    <h1>MEIN KONTO / TESTS</h1>
+
+    <stzh-mk-dashboard title="Mein Konto Dashboard 1">
+        <span slot="title">Mein Konto (1)</span>
+        <span slot="menu1">Meine Services</span>
+        <span slot="menu2">Alle Services</span> 
+        <span slot="menu3">Mitteilungen</span> 
+        <span slot="menu4">Einstellungen</span> 
     </stzh-mk-dashboard>
 
-    <h1>First Steps 2</h1>
-    <ul>
-        <li>erster eintrag</li>
-        <li>zweiter eintrag</li>
-        <li>dritter eintrag</li>
-    </ul>
-    <script src="app.js" type="module"></script>
+    <stzh-mk-dashboard>
+        <span slot="title">Mein Konto (2)</span>
+        <span slot="menu1">Meine Services</span>
+        <span slot="menu2">Alle Services</span> 
+        <span slot="menu3">Mitteilungen</span> 
+        <span slot="menu4">Einstellungen</span> 
+        <span slot="content">
+            <stzh-mk-dashboard-card>
+                <span slot="title">News</span>
+                <span slot="subtitle">Alle News</span> 
+                hhhh
+            </stzh-mk-dashboard-card>
+            <stzh-mk-dashboard-card>
+                <span slot="title">Meine Schule</span>
+                <span slot="subtitle">Riedhof-Pünten</span> 
+            </stzh-mk-dashboard-card>
+            <stzh-mk-dashboard-card>
+                <span slot="title">Entsorgungskalender</span>
+                <span slot="subtitle">Imbisbühlstrasse 67</span> 
+                <span slot="description">Aktuell nicht verfügbar</span> 
+            </stzh-mk-dashboard-card>
+        </span>
+    </stzh-mk-dashboard>
+
+    <script src="skzMkDashboard.js" type="module"></script>
+    <script src="skzMkDashboardCard.js" type="module"></script>
 </body>
 </html>

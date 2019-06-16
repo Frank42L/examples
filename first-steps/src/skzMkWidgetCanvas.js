@@ -88,7 +88,7 @@ class StzhMkWidgetCanvas extends HTMLElement {
         inhalt.textContent = this.textContent;
 
         var style = document.createElement('style');
-        style.textContent = '@import url("rwrd_simulation.css");';
+        style.textContent = '@import url("assets/css/rwrd_simulation.css");';
         shadow.appendChild(style);
         shadow.appendChild(appDashboardItem);
         shadow.appendChild(wrapper);
