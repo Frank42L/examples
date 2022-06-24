@@ -17,12 +17,16 @@ class StzhMkCallToAction extends HTMLElement {
                 <style>@import url("assets/css/style_mk.css");</style>
                 <style>@import url("assets/css/rwrd_simulation.css");</style>
                 <div class="stzh-mk-call-to-action">
-                   hallo du da
                    <!-- <a href="${this.href}"><slot>[CTA_TEXT1]</slot></a> -->
-                    <br/>
-                    <a href="http://localhost:3000"><slot>[CTA_TEXT]</slot></a>
+                   {script}
+                      function getName() {
+                          console.log("FRANK");
+                          return "FRANK";
+                      }
+                   {/script}
+                    Filtern auf get <a href="http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger/Loeliger/Frank"><slot name="cta_text">[CTA_TEXT]</slot></a>
                 </div>
-            `;
+            `; 
         }
     }
 

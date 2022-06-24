@@ -10,6 +10,7 @@ import javax.ws.rs.core.Response;
 @Path("/birthdays/user/{user}")
 public class Birthdays {
 	
+	
 	@GET
     @Produces({ MediaType.APPLICATION_JSON })
     public Response getBirthdayList(@PathParam("user") String user) {

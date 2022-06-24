@@ -12,8 +12,6 @@
 
 <body>
 
-    <h1>Geburtstagsliste - Test</h1>
-
     <script src="js/jquery.js"></script>
     <script>
         function getAge(day, month, year) {
@@ -134,17 +132,28 @@
             });
         }
 
-        $( "<stzh-mk-call-to-action>"
-            + "<span slot='cta_text'>" + "irene.troxler" + "</span>"
-            + "</stzh-mk-call-to-action>"
-        ).appendTo( "body" );
+        function addImportButton(user) {
+            $( "<stzh-mk-call-to-action>"
+                + "<span slot='cta_text'>" + user + "</span>"
+                + "</stzh-mk-call-to-action>"
+            ).appendTo( "body" );
+        }
 
+    </script>
+
+    <h1>Geburtstagsliste - Test</h1>
+
+    <h2>Testen des Uploads</h2>
+
+    <script>
         prepareMonths();
+        addImportButton("frank.loeliger.test");
         addBirthdays("irene.troxler");      
         addBirthdays("frank.loeliger");      
         addBirthdays("regression.test");      
     </script>
- 
+
+
     <script src="skzMkDashboard.js" type="module"></script>
     <script src="skzMkDashboardCard.js" type="module"></script>
     <script src="skzMkCallToAction.js" type="module"></script>
