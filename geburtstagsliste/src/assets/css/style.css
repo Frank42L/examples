@@ -1,0 +1,67 @@
+html {
+  background: rgb(255, 255, 255);
+}
+
+div {
+  display : block;
+}
+
+body {
+  font-family: HelveticaNeueLTW01_55Roman,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 1rem;
+  line-height: 1.6875;
+  color: rgb(91, 107, 245);
+  hyphens: manual;
+  overflow-x: hidden;
+}
+
+h1 {
+  font-size: 1.7em;
+  margin-block-start: 0em;
+  margin-block-end: 0em;
+  margin-inline-start: 0em;
+  margin-inline-end: 0em;
+  border: 0px gray dotted;
+}
+h2 {
+  font-size: 1.5em;
+  margin-block-start: 0em;
+  margin-block-end: 0em;
+  margin-inline-start: 0em;
+  margin-inline-end: 0em;
+  border: 0px gray dotted;
+}
+h3 {
+  font-size: 1.2em;
+  margin-block-start: 0em;
+  margin-block-end: 0em;
+  border: 0px gray dotted;
+}
+h4 {
+  font-size: 1em;
+  margin-block-start: 0em;
+  margin-block-end: 0em;
+  margin-inline-start: 0em;
+  margin-inline-end: 0em;
+  border: 0px gray dotted;
+}
+p {
+  margin-block-start: 0em;
+  margin-block-end: 0em;
+  margin-inline-start: 0em;
+  margin-inline-end: 0em;
+}
+ul {
+  margin-block-start: 0em;
+  margin-block-end: 0em;  
+  margin-inline-start: 0em;
+  margin-inline-end: 0em;
+  border: 0px gray dotted;
+}
+li {
+  margin-block-start: 0em;
+  margin-block-end: 0em;  
+  margin-inline-start: 0em;
+  margin-inline-end: 0em;
+  border: 0px gray dotted;
+}

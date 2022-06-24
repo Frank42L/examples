@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"name": "js",
+			"path": "..\\..\\js"
+		},
+		{
+			"name": "geburtstagsliste",
+			"path": ".."
+		},
+		{
+			"name": "first-steps",
+			"path": "..\\..\\first-steps"
+		}
+	],
+	"settings": {}
+}

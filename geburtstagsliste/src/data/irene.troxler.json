@@ -1,0 +1,14 @@
+{
+    "birthdays":[
+        {"firstname":"Christoph", "surname":"Troxler",   "day":"7",  "month":"7",  "year": "1955"},
+        {"firstname":"Urban", "surname":"Troxler",   "day":"11", "month":"2", "year": "1954"},
+        {"firstname":"Isa", "surname":"Troxler",   "day":"14",  "month":"9", "year": "1956"},
+        {"firstname":"Frank", "surname":"Loeliger",   "day":"3",  "month":"5",  "year": "1966"},
+        {"firstname":"Irène", "surname":"Loeliger Troxler",   "day":"13", "month":"10", "year": "1966"},
+        {"firstname":"Mario", "surname":"Loeliger",   "day":"3",  "month":"12", "year": "2001"},
+        {"firstname":"Alessia", "surname":"Loeliger", "day":"3",  "month":"2",  "year": "2005"},
+        {"firstname":"Hans", "surname":"Muster",      "day":"3",  "month":"12", "year": "1951"},
+        {"firstname":"Petra", "surname":"Meyer",      "day":"3",  "month":"12", "year": "1960"},
+        {"firstname":"Hans", "surname":"Muster",      "day":"27",  "month":"10", "year": "2001"}
+    ]
+}

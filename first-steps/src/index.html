@@ -27,25 +27,31 @@
         <span slot="menu2">Alle Services</span> 
         <span slot="menu3">Mitteilungen</span> 
         <span slot="menu4">Einstellungen</span> 
-        <span slot="content">
-            <stzh-mk-dashboard-card>
-                <span slot="title">News</span>
-                <span slot="subtitle">Alle News</span> 
-                hhhh
-            </stzh-mk-dashboard-card>
-            <stzh-mk-dashboard-card>
-                <span slot="title">Meine Schule</span>
-                <span slot="subtitle">Riedhof-Pünten</span> 
-            </stzh-mk-dashboard-card>
-            <stzh-mk-dashboard-card>
-                <span slot="title">Entsorgungskalender</span>
-                <span slot="subtitle">Imbisbühlstrasse 67</span> 
-                <span slot="description">Aktuell nicht verfügbar</span> 
-            </stzh-mk-dashboard-card>
-        </span>
+
+        <stzh-mk-dashboard-card>
+            <span slot="title">News</span>
+            <span slot="subtitle">Alle News</span> 
+            <stzh-mk-call-to-action href="https://www.stadt-zuerich.ch/news">
+                Zeige Neuigkeiten
+            </stzh-mk-call-to-action>
+        </stzh-mk-dashboard-card>
+        <stzh-mk-dashboard-card>
+            <span slot="title">Meine Schule</span>
+            <span slot="subtitle">Riedhof-Pünten</span> 
+            <span slot="description">Direktlink zur Schule...</span> 
+            <stzh-mk-call-to-action href="https://www.stadt-zuerich.ch">
+                Zeige Schule
+            </stzh-mk-call-to-action>
+        </stzh-mk-dashboard-card>
+        <stzh-mk-dashboard-card>
+            <span slot="title">Entsorgungskalender</span>
+            <span slot="subtitle">Imbisbühlstrasse 67</span> 
+            <span slot="description">Aktuell nicht verfügbar</span> 
+        </stzh-mk-dashboard-card>
     </stzh-mk-dashboard>
 
     <script src="skzMkDashboard.js" type="module"></script>
     <script src="skzMkDashboardCard.js" type="module"></script>
+    <script src="skzMkCallToAction.js" type="module"></script>
 </body>
 </html>

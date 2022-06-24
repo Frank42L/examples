@@ -4,6 +4,7 @@
   Command line
 	G:
 	Cd G:\Privat\Frank\PRIVAT\Fingerübungen\airhack_adam_bien\Frank42L-examples\first-steps\src
+  Cd G:\Privat\Frank\PRIVAT\Fingerübungen\airhack_adam_bien\Frank42L-examples\geburtstagsliste\src
 	Browser-sync start --server --files "*"
 3) Die URL localhost:3000 im Chrome starten (da im IE ohne Massanhem nicht alles unterstützt ist)
 4) msys2 (Bash Shell) - Desktop "Git Bash" oder Mintty in Startleiste
@@ -20,11 +21,31 @@ https://www.github.com (Frank42L)
 
 
 # Mein Konto Reference Seite
-original auf: dece.stadt-zuerich.ch/refpage
+original auf: dece.stadt-zuerich.ch/refpage und neu auf designsystem.stadt-zuerich.ch
 A) G:\Privat\Frank\PRIVAT\Fingerübungen\reference_styles\stzhrwrd-meinkonto 2018-06-22 18_53_24\prod\index_mein_konto.html
 B)file:///G:/Privat/Frank/PRIVAT/Finger%C3%BCbungen/reference_styles/v7-13-3/index_mein_konto.html
 
-# examples
+# Tomcat
+Start mit
+  %CATALINA_HOME%\bin\startup
+  http:\\localhost:8080\helloworld
+
+# REST Services after Tomcat runs (see ecplise)
+http://localhost:8080/jerseydemo/sayhello/frank
+http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger
+http://localhost:8080/jerseydemo/birthdays/user/irene.troxler
+http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger/Loeliger/Frank
+http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger/Muster/Hans
+http://localhost:8080/jerseydemo/birthdays/users/Muster/Hans?user=frank.loeliger&user=irene.troxler
+
+http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.test/upload
+http://localhost:8080/jerseydemo/emailverification/frank.loeliger@bluewin.ch
+http://localhost:8080/jerseydemo/emailsending/mail@frank.loeliger.name
+
+
+
+  
+# examples GIT
 Eigene Beispiele auf Github
 - erster Schritt - Gehversuche mit Git
 - zweiter Schritt - Gehversuch mit Pull Requests (firstpull)
