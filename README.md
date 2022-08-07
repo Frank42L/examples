@@ -31,6 +31,10 @@ Start mit
   http:\\localhost:8080\helloworld
 
 # REST Services after Tomcat runs (see ecplise)
+Gute Erklärungen zum Aufbau von REST APIS
+- https://jax.de/blog/software-architecture-design/restful-apis-richtig-gemacht/
+- https://jsonapi.org/format/ (Noch nicht von diesem Beispiel so umgesetzt)
+
 http://localhost:8080/jerseydemo/sayhello/frank
 http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger
 http://localhost:8080/jerseydemo/birthdays/user/irene.troxler
@@ -41,6 +45,9 @@ http://localhost:8080/jerseydemo/birthdays/users/Muster/Hans?user=frank.loeliger
 http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.test/upload
 http://localhost:8080/jerseydemo/emailverification/frank.loeliger@bluewin.ch
 http://localhost:8080/jerseydemo/emailsending/mail@frank.loeliger.name
+
+Ersatz der aller Geburtstage: POST http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.test mit JSON File
+Hinzufügen falls noch nicht drin: PATCH http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.test mit JSON File
 
 
 

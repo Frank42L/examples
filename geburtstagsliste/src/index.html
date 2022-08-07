@@ -49,10 +49,10 @@
         function createDayIfNotExists(month, day) {
             if( $("#month_"+ month + "_" + day).length )  
             { 
-                console.log ("month_"+ month + "_" + day+" exists");
+                // console.log ("month_"+ month + "_" + day+" exists");
             } else 
             {
-                console.log("month_"+ month + "_" + day+" does not exist");
+                // console.log("month_"+ month + "_" + day+" does not exist");
                 $( "<stzh-mk-birthday-day id='month_"+ month + "_" + day+"'> "
                     + "<span slot='day'>" + day + "</span>"
                     + "</stzh-mk-birthday-day>"
@@ -64,7 +64,7 @@
         function birthdayExists(val) {
             if( $("#person_hash_"+ val.hash).length )  
             { 
-                console.log ("person_hash_"+ val.hash + " exists");
+                console.log ("person_hash_"+ val.hash + " exists (" + val.firstname + " " + val.surname + ")");
                 return true;
             }
             return false;
@@ -121,7 +121,6 @@
 
                 $.each( data.birthdays, function( key, val ) {
                     if (val.month == null || val.day == null) {
-                        console.log('jjjjjjjjjj');
                         val.month = 0;
                         val.day = 0;
                     } 
@@ -132,9 +131,11 @@
             });
         }
 
-        function addImportButton(user) {
-            $( "<stzh-mk-call-to-action>"
-                + "<span slot='cta_text'>" + user + "</span>"
+        function addUploadButton(buttontext, url) {
+            $( "<stzh-mk-call-to-action "
+                + "destination='" + url + "'" 
+                + " buttontext='" + buttontext + "'"
+                + ">"
                 + "</stzh-mk-call-to-action>"
             ).appendTo( "body" );
         }
@@ -145,9 +146,36 @@
 
     <h2>Testen des Uploads</h2>
 
+    <h3>Bitte korrekt formatierte Files hochladen</h3>
+
+    <form action="http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.test" 
+            method="post"
+            enctype="multipart/form-data"
+            content-type="charset=utf-8">
+        <p>Ersetze die Geburtstagsliste vollständig (Create/Replace)</p>
+        <label for="upload_file">Create or Replace</label>
+        <input type="file" id="upload_file" name="file" accept="application/json">
+        <input type="submit">
+    </form>
+
+    <form action="http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.test" 
+    method="post"
+    enctype="multipart/form-data">
+        <p>Ergänze die Geburtstagsliste (Update)</p>
+        <input type="hidden" name="_rest_method" value="patch">
+        <label for="update_file">Update</label>
+        <input type="file" id="update_file" name="file" accept="application/json">
+        <input type="submit">
+    </form>
+
     <script>
+        var urlShow = "http://localhost:8080/jerseydemo/birthdays/user/";
+        var urlUpload = "http://localhost:8080/jerseydemo/birthdays/user/";
+
         prepareMonths();
-        addImportButton("frank.loeliger.test");
+        addUploadButton("Show Irène", urlShow + "irene.troxler");
+        addUploadButton("Show Frank", urlShow + "frank.loeliger");
+        // addUploadButton("Upload Test", urlUpload + "frank.loeliger.test");
         addBirthdays("irene.troxler");      
         addBirthdays("frank.loeliger");      
         addBirthdays("regression.test");      

@@ -3,8 +3,17 @@
 
 const templateNode = document.createElement('template');
 
-
+/*
+    StzhMKCallToAction 
+    - Attribute 'destination' = Url to be called 
+    - Attribute 'buttontext' = text in the button
+*/
 class StzhMkCallToAction extends HTMLElement {
+
+    static get observedAttribtes() {
+        return ['destination', 'buttontext'];
+    }
+
     constructor() { 
         super();
         this.shadow = this.attachShadow({mode: 'open'});
@@ -12,31 +21,58 @@ class StzhMkCallToAction extends HTMLElement {
 
     connectedCallback() { 
         if (this.isConnected){
-            this.shadow.innerHTML = `
-                <style>@import url("assets/css/style.css");</style>
-                <style>@import url("assets/css/style_mk.css");</style>
-                <style>@import url("assets/css/rwrd_simulation.css");</style>
-                <div class="stzh-mk-call-to-action">
-                   <!-- <a href="${this.href}"><slot>[CTA_TEXT1]</slot></a> -->
-                   {script}
-                      function getName() {
-                          console.log("FRANK");
-                          return "FRANK";
-                      }
-                   {/script}
-                    Filtern auf get <a href="http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger/Loeliger/Frank"><slot name="cta_text">[CTA_TEXT]</slot></a>
-                </div>
-            `; 
+            this.loadTemplateToShadow(this.shadow, 'StzhMkCallToAction.html')
+                .then(r => {
+                    this.anchor.href = this.destination;
+                    this.anchor.textContent = this.buttontext;        
+                });
         }
     }
 
-    set href(hrefContent) { 
-        this.setAttribute('href', hrefContent);
+    loadTemplateToShadow(targetElem, fileName){
+        return fetch(fileName)
+            .then(r => r.text())
+            .then(template => {
+                targetElem.innerHTML = template;
+            }
+        );
     }
-    
-    get href() { 
-        return this.getAttribute('href');
+
+    get anchor () {
+        return this.shadowRoot.querySelector('a');
     }
+
+    get destination () {
+        return this.getAttribute('destination');
+    }
+
+    set destination(value){
+        if ('string' === typeof value) {
+            this.setAttribute('destination', value);
+        }
+    }
+
+    get buttontext () {
+        return this.getAttribute('buttontext');
+    }
+
+    set buttontext(value){
+        if ('string' === typeof value) {
+            this.setAttribute('buttontext', value);
+        }
+    }
+
+    attributeChangedCallback(attrName, oldValue, newValue) {
+        switch (attrName) {
+          case 'destination':
+            this.anchor.href = newValue;
+            break;
+          case 'buttontext':
+            this.anchor.textContent = newValue;
+            break;
+         }
+        
+      }
 
 }
 
