@@ -1,0 +1,9 @@
+{
+    "birthdays":[
+        {"firstname":"Peter", "surname":"Muster",     "day":"2",  "month":"5",  "year": "1966"},
+        {"firstname":"Anja",  "surname":"Meier",      "day":"1",  "month":"1",  "year": ""},
+        {"firstname":"Paul",  "surname":"Meier",      "day":"1",  "month":"1",  "year": "",
+          "updatevalues": { "firstname":"Paul",  "surname":"Meier",      "day":"1",  "month":"1",  "year": "1968" }   
+        }
+    ]
+}

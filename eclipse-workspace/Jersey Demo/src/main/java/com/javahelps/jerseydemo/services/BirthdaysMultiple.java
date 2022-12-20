@@ -54,7 +54,7 @@ public class BirthdaysMultiple {
     	BirthdayList blAll;
     	
     	blAll = readBirthdaysFromFile2Json(users);
-    	json = "This is the List for " + firstname + " " + surname + "\n" + blAll.filterPerson(surname, firstname).toJson();
+    	json = /* "This is the List for " + firstname + " " + surname + "\n" + */ blAll.filterPerson(surname, firstname).toJson();
         return Response.ok() // 200
         		.entity(json)
         		.build();

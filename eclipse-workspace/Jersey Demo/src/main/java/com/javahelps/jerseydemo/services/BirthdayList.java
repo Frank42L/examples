@@ -18,6 +18,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class BirthdayList {
+	private static boolean VERBOSE = false;
+	private static void println(String s) {
+		if (VERBOSE) { 
+			System.out.println(s);
+		}
+	}
+	
+
+	
 	private Set<BirthDayPerson> setBirthDayPersons;
 
 	BirthdayList() {
@@ -36,16 +45,19 @@ public class BirthdayList {
 		setBirthDayPersons.addAll(bl.getBirthdays());
 	}
 
+	public void remove(BirthdayList bl) {
+		setBirthDayPersons.removeAll(bl.getBirthdays());
+	}
+
 	public String toJson() {
 		String json = "N/A";
 	    ObjectMapper mapper = new ObjectMapper();
 		try {
 			json = mapper.writeValueAsString(this);    		
-			//json = mapper.writeValueAsString(setBirthDayPersons);    		
 	    } catch (Exception ex) {
 		    ex.printStackTrace();
 	    }
-		System.out.println("ResultingJSONstring = " + json);
+		println("ResultingJSONstring = " + json);
 	    return json;		
 	}
 	
@@ -64,6 +76,25 @@ public class BirthdayList {
 	    return bl;
 	}
 
+	public BirthdayList filterPerson(String surname, String firstname, 
+			Integer year, Integer month, Integer day) {
+		BirthDayPerson bdp;
+		BirthdayList bl = new BirthdayList();
+		Iterator<BirthDayPerson> iter = setBirthDayPersons.iterator();
+		
+		while (iter.hasNext() ) {
+			bdp = iter.next();
+			if ( (firstname.compareTo(bdp.getFirstname()) == 0) && 
+				 (surname.compareTo(bdp.getSurname()) == 0) &&
+				 (year.compareTo(bdp.getYear()) == 0) &&
+				 (month.compareTo(bdp.getMonth()) == 0) &&
+				 (day.compareTo(bdp.getDay()) == 0)) {
+				bl.getBirthdays().add(bdp);
+			}
+		}
+	    return bl;
+	}
+
 	static public BirthdayList readBirthdaysFromFile2Json( final String user ) {
 	    ObjectMapper mapper = new ObjectMapper();
 	    BirthdayList bl = new BirthdayList();
@@ -72,7 +103,7 @@ public class BirthdayList {
 		File f = Paths.get(pathname).toFile();
 	    try {
 	    	bl = mapper.readValue(f, BirthdayList.class);
-			System.out.println('\t' + "Einträge = " + bl.getBirthdays().size() + '\t' + "Filename = " + pathname);
+			println('\t' + "Einträge = " + bl.getBirthdays().size() + '\t' + "Filename = " + pathname);
 	    } catch (JsonProcessingException e) {
 		       e.printStackTrace();
 		    } catch (Exception ex) {
@@ -83,25 +114,27 @@ public class BirthdayList {
 	
 	static private File getFileAndCreateIfNotExists( final String user ) throws IOException {
 		String pathname = "G:\\Privat\\Frank\\PRIVAT\\Fingerübungen\\airhack_adam_bien\\Frank42L-examples\\geburtstagsliste\\src\\data\\" + user + ".json";
-		System.out.println("Username = " + user);
+		println("Username = " + user);
 		File f = Paths.get(pathname).toFile();
 			if (f.createNewFile()) {
-				System.out.println("File has been created: " + f.getAbsoluteFile());
+				println("File has been created: " + f.getAbsoluteFile()); 
 			} else {
-				System.out.println("File already exists: " + f.getAbsoluteFile());			
+				println("File already exists: " + f.getAbsoluteFile());			
 			}			
  		return f;
 	} 
 	
 	
-	static public BirthdayList getBirthdaysFromStream(final String user, InputStream is) throws IOException {
+	static public BirthdayList getBirthdaysFromStream(InputStream is, final String comment) throws IOException {
     	BufferedReader bis = null;
     	ObjectMapper mapper = new ObjectMapper();
 	    BirthdayList bl = new BirthdayList();
 	    try {
 	    	bis = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 	    	bl = mapper.readValue(bis, BirthdayList.class);
-			System.out.println('\t' + "Einträge = " + bl.getBirthdays().size() + '\t' + "for user = " + user);
+	    	if (!comment.isBlank()) {
+	    		println('\t' + comment + "\tEinträge = " + bl.getBirthdays().size());
+	    	}
 	    } catch (JsonProcessingException e) {
 	       e.printStackTrace();
 	       // Keep it empty

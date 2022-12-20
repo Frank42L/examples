@@ -25,7 +25,13 @@ original auf: dece.stadt-zuerich.ch/refpage und neu auf designsystem.stadt-zueri
 A) G:\Privat\Frank\PRIVAT\Fingerübungen\reference_styles\stzhrwrd-meinkonto 2018-06-22 18_53_24\prod\index_mein_konto.html
 B)file:///G:/Privat/Frank/PRIVAT/Finger%C3%BCbungen/reference_styles/v7-13-3/index_mein_konto.html
 
-# Tomcat
+# Entwicklungsumgebung
+eclipse starten
+
+# junit/Maven Helper
+https://maven.apache.org/guides/getting-started/index.html#How_do_I_setup_Maven
+
+# Tomcat (Falls keine Entwicklung)
 Start mit
   %CATALINA_HOME%\bin\startup
   http:\\localhost:8080\helloworld
@@ -114,4 +120,3 @@ UM MIT BRANCHES Arbeiten zu können:
     - Fast-forward (rebasing) -> Niemand sonst hat gebranchet
     - 3-way-merge -> falls es einen anderen Branche gibt.
 
-test after Pull request
