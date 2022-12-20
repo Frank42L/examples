@@ -11,6 +11,17 @@ public class BirthDayPerson extends Object implements Comparable<BirthDayPerson>
 	private Integer day;
 	private Integer month;
 	private Integer year;
+	private BirthDayPerson updatevalues;
+	
+	public BirthDayPerson() {
+		firstname = "";
+		surname = "";
+		day = 0;
+		month = 0;
+		year = 0;
+		updatevalues = null;
+	}
+	
 	public String getUuid() {
 		return uuid;
 	}
@@ -32,6 +43,12 @@ public class BirthDayPerson extends Object implements Comparable<BirthDayPerson>
 	public void setUuid2Original(String uuid2Original) {
 		this.uuid2Original = uuid2Original;
 	}
+	public void setUpdatevalues(BirthDayPerson updatevalues) {
+		this.updatevalues = updatevalues;
+	}
+	public BirthDayPerson getUpdatevalues() {
+		return this.updatevalues;
+	}
 	public String getFirstname() {
 		return firstname;
 	}
@@ -48,19 +65,26 @@ public class BirthDayPerson extends Object implements Comparable<BirthDayPerson>
 		return day;
 	}
 	public void setDay(Integer day) {
-		this.day = day;
+		this.day = (day == null) ? 0: day;
 	}
 	public Integer getMonth() {
 		return month;
 	}
 	public void setMonth(Integer month) {
-		this.month = month;
+		this.month = (month == null) ? 0: month;
 	}
 	public Integer getYear() {
 		return year;
 	}
-	public void setYear(Integer year) {
-		this.year = year;
+	public void setYear(Integer year) { 
+		this.year = (year == null) ? 0: year;
+	}
+	public String toString() {
+		return String.format("%02d", getDay()) + "." 
+				+ String.format("%02d", getMonth()) +"." 
+				+ String.format("%04d", getYear()) 
+				+ "\t" + getFirstname() 
+				+ " " + getSurname();
 	}
 	
 	@Override
@@ -83,10 +107,26 @@ public class BirthDayPerson extends Object implements Comparable<BirthDayPerson>
 		int result = 0;
 		if (result == 0) { result = this.surname.compareTo(bdp.surname); }
 		if (result == 0) { result = this.firstname.compareTo(bdp.firstname); }
-		if (result == 0) { result = this.year.compareTo(bdp.year); }
+		if (result == 0) { result = this.year.compareTo(bdp.year) ; }
 		if (result == 0) { result = this.month.compareTo(bdp.month); }
 		if (result == 0) { result = this.day.compareTo(bdp.day); }
 		return result;
+	}
+
+	public void update() {
+		BirthDayPerson p = getUpdatevalues();
+		if (p != null) {
+			if (p.getFirstname() != null && !p.getFirstname().isEmpty()) { setFirstname(p.getFirstname()); }
+			if (p.getSurname()   != null && !p.getSurname().isEmpty()) { setSurname(p.getSurname()); }
+			if (p.getDay()       != null) { setDay(p.getDay()); }
+			if (p.getMonth()     != null) { setMonth(p.getMonth()); }
+			if (p.getYear()      != null) { setYear(p.getYear()); }
+		}
+		markAsUpdated();
+	}
+	
+	private void markAsUpdated() {
+		setUpdatevalues(null);
 	}
 
 }

@@ -2,6 +2,7 @@ package com.javahelps.jerseydemo.services;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -21,6 +22,18 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 @Path("/birthdays/user/{user}")
 public class Birthdays {
+	private static boolean VERBOSE = false;
+	private static void print(String s) {
+		if (VERBOSE) { 
+			System.out.print(s);
+		}
+	}
+	private static void println(String s) {
+		if (VERBOSE) { 
+			System.out.println(s);
+		}
+	}
+
 
 	@GET
     @Produces({ MediaType.APPLICATION_JSON })
@@ -40,13 +53,91 @@ public class Birthdays {
     	BirthdayList blAll;
     	
     	blAll = BirthdayList.readBirthdaysFromFile2Json(user);
-    	json = "This is the List for " + firstname + " " + surname + "\n" + blAll.filterPerson(surname, firstname).toJson();
+    	json = blAll.filterPerson(surname, firstname).toJson();
         return Response.ok() // 200
         		.entity(json)
         		.build();
     }
     
+    @GET
+    @Path("/{surname}/{firstname}/{year}/{month}/{day}")
+    @Produces("text/plain")
+    public Response getBirthdayForPerson(@PathParam("user") String user, @PathParam("surname") String surname, @PathParam("firstname") String firstname,
+    		@PathParam("year") String year, @PathParam("month") String month, @PathParam("day") String day) {
+    	String json;
+    	BirthdayList blAll;
+
+    	println("Search within (user = " + user + ") for : " + firstname + " " + surname + " " + day + "." + month + "." + year);
+
+    	blAll = BirthdayList.readBirthdaysFromFile2Json(user);
+    	json = blAll.filterPerson(
+    			surname, 
+    			firstname, 
+    			Integer.valueOf(year), 
+    			Integer.valueOf(month),
+    			Integer.valueOf(day)).toJson();
+        return Response.ok() // 200
+        		.entity(json)
+        		.build();
+    }
 	
+    @POST
+    @Path("/{surname}/{firstname}/{year}/{month}/{day}")
+    @Produces("text/plain")
+    public Response updateBirthdayForPerson(@PathParam("user") String user, @PathParam("surname") String surname, @PathParam("firstname") String firstname,
+    		@PathParam("year") String year, @PathParam("month") String month, @PathParam("day") String day,
+    		@FormDataParam("_rest_method") String restMethod,
+    		@FormDataParam("year")  String updateYear,
+    		@FormDataParam("month") String updateMonth,
+    		@FormDataParam("day")   String updateDay
+    		) {
+    	String json;
+    	BirthdayList blAll;
+    	BirthdayList blUpdated;
+    	BirthDayPerson p;
+
+    	println("Update (user = " + user + ") for : " + firstname + " " + surname + " " + day + "." + month + "." + year);
+    	println("\twith " + updateDay + "." + updateMonth + "." + updateYear);
+
+    	// Search person(s)
+    	blAll = BirthdayList.readBirthdaysFromFile2Json(user);
+    	blUpdated = blAll.filterPerson(
+    			surname, 
+    			firstname, 
+    			Integer.valueOf(year), 
+    			Integer.valueOf(month),
+    			Integer.valueOf(day));
+
+    	// Remove the old persons  
+    	blAll.remove(blUpdated);
+    	
+    	// Update birthdate now
+    	Iterator<BirthDayPerson> iter;
+    	iter = blUpdated.getBirthdays().iterator();
+    	while (iter.hasNext()) {
+    		p = iter.next();
+    		p.setDay(Integer.valueOf(updateDay));
+    		p.setMonth(Integer.valueOf(updateMonth));
+    		p.setYear(Integer.valueOf(updateYear));
+    	}
+    	
+    	// Update File now
+    	blAll.insert(blUpdated);
+    	
+    	// read from file (might be not necessary, but ensures, file has fully been written
+		try {
+			BirthdayList.writeBirthdays2File(user, blAll);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+    	json = BirthdayList.readBirthdaysFromFile2Json(user).toJson();
+		
+        return Response.ok() // 200
+        		.entity(json)
+        		.build();
+    }
+
     // Because normal HTML browser do only support POST and GET, they do not support the 
     // typically REST Calls PUT/DELETE/PATCH. To support this in case one wants to use the REST API
     // with normal browsers, the can add a hidden field (one of the following three optionas):
@@ -72,19 +163,19 @@ public class Birthdays {
     		@FormDataParam("file") InputStream uploadedInputStream,
     		@FormDataParam("file") FormDataContentDisposition fileDetail) {
 		if (restMethod != null) {
-	    	System.out.println("Routing POST/PUT/PATCH/DELETE if coming from normal HTML Pages which only support GET and POST");    	
-	    	System.out.print("_rest_method = " + restMethod);    	
+	    	println("Routing POST/PUT/PATCH/DELETE if coming from normal HTML Pages which only support GET and POST");    	
+	    	print("_rest_method = " + restMethod);    	
 			if (restMethod.compareToIgnoreCase("patch") == 0) {
-		    	System.out.println(" routed to : mergeBirthdayList");    	
+		    	println(" routed to : mergeBirthdayList");    	
 				return mergeBirthdayList(user, uploadedInputStream, fileDetail);
 			} else if (restMethod.compareToIgnoreCase("put") == 0) {
-		    	System.out.println(" not supported yet");    	
+		    	println(" not supported yet");    	
 			} else if (restMethod.compareToIgnoreCase("delete") == 0) {
-		    	System.out.println(" not supported yet");    	
+		    	println(" not supported yet");    	
 			}
 		    throw new RuntimeException("Rest Method '_rest_method = " + restMethod + " is not supported");
 		}
-    	System.out.println("POST : routed to uploadBirthdayList");    	
+    	println("POST : routed to uploadBirthdayList");    	
 		return uploadBirthdayList(user, uploadedInputStream, fileDetail);
 	}
     
@@ -95,9 +186,9 @@ public class Birthdays {
     	String json;  	
 		BirthdayList bl;
     	
-    	System.out.println("Upload and Replace (user = " + user + ") with File : " + fileDetail.getFileName());
+    	println("Upload and Replace (user = " + user + ") with File : " + fileDetail.getFileName());
     	try {
-    		bl = BirthdayList.getBirthdaysFromStream(user, uploadedInputStream);
+    		bl = BirthdayList.getBirthdaysFromStream(uploadedInputStream, user);
 			BirthdayList.writeBirthdays2File(user, bl);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -117,15 +208,15 @@ public class Birthdays {
     		@FormDataParam("file") FormDataContentDisposition fileDetail) {
     	String json;  	
     	
-    	System.out.println("Merge (user = " + user + ") with File : " + fileDetail.getFileName());
+    	println("Merge (user = " + user + ") with File : " + fileDetail.getFileName());
     	
     	BirthdayList blAll;
     	BirthdayList blToMerge;
     	
     	try {
-			blToMerge = BirthdayList.getBirthdaysFromStream(user, uploadedInputStream);
+			blToMerge = BirthdayList.getBirthdaysFromStream(uploadedInputStream, user);
         	blAll = BirthdayList.readBirthdaysFromFile2Json(user);
-        	blAll.insert(blToMerge);
+        	blAll = mergeUpdatedValues(blAll, blToMerge);
 			BirthdayList.writeBirthdays2File(user, blAll);
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -136,5 +227,27 @@ public class Birthdays {
         		.entity(json)
         		.build();
     }
+	
+	private BirthdayList mergeUpdatedValues(BirthdayList blAll, BirthdayList blToMerge) {
+		for (BirthDayPerson p : blToMerge.getBirthdays()) {
+			print("\t " + p.toString() + "\t: ");
+			if (p.getUpdatevalues() != null) {
+				// remove outdated persons 
+				if (blAll.getBirthdays().remove(p)) { 
+					print("-");
+				}
+				p.update();
+				print("u");
+			}
+			if (blAll.getBirthdays().add(p)) {
+				print("+");
+			};
+			println("");
+		}
+		
+    	return blAll;
+	}
+	
+	
 
 }
