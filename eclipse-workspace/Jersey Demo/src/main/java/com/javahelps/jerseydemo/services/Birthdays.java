@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.Iterator;
 
 import javax.ws.rs.Consumes;
@@ -69,7 +70,9 @@ public class Birthdays {
      */
     public static final CSVFormat DEFAULT_SEMICOLON = CSVFormat.DEFAULT.builder()
     		.setHeader()
-    		.setDelimiter(SEMICOLON).build();
+    		.setDelimiter(SEMICOLON).build()
+    		;
+    
 
 
 
@@ -257,7 +260,7 @@ public class Birthdays {
     	BirthdayList blToMerge;
  	
 		CSVParser parser;
-		Reader reader = new InputStreamReader(uploadedInputStream);
+		Reader reader;
 		int ignoredRows = 0;
 		int processedRows = 0;
 		String ignored = " rows ignored because of missing ";
@@ -270,6 +273,7 @@ public class Birthdays {
 		blToMerge = new BirthdayList();
 
     	try {
+    		reader = new InputStreamReader(uploadedInputStream, "UTF-8");
     		parser = CSVParser.parse(reader, Birthdays.DEFAULT_SEMICOLON);
     		for (String sHeader : parser.getHeaderNames()) {
     			println("\t" + sHeader, true);    			
