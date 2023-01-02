@@ -8,13 +8,14 @@
 .stzh-mk-birthday-day {
   display:table;
   border-spacing:2px;
+  border-radius: 0.5em;
   width:100%;
   margin-block-start: 0.1em;
   margin-block-end: 0.1em;
   margin-inline-start: 0.0em;
   margin-inline-end: 0.1em;
-  padding: 0.0em 0.2em 0.2em 0.2em;
-  border: 0px brown dotted;
+  padding: 0.1em 0.2em 0.2em 0.2em;
+  border: 1px rgb(91,107,245) dotted;
 }
 
 .stzh-mk-birthday-day-left {
@@ -28,9 +29,15 @@
   border: 0px red dotted;
 }
 .stzh-mk-birthday-day-badge {
+  border-radius: 1.5em;
   color:rgb(255, 255, 255); 
   background-color: rgb(91, 107, 245);
-  width:2em; 
+  padding-top:0.18em;
+  padding-right:0.1em;
+  margin-top:0.1em;
+  margin-right:0.1em;
+  width:2.3em; 
+  font-size: 0.9em;
   text-align: center;
   border: 0px red dotted;
 }

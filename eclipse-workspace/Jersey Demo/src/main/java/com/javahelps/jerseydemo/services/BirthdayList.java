@@ -18,7 +18,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class BirthdayList {
+	private static final String SERVER_SIDE_DATA_DIR = "G:\\Privat\\Frank\\PRIVAT\\Fingerübungen\\Geburtstagsliste\\data_serverside\\";
 	private static boolean VERBOSE = false;
+	private static void print(String s) {
+		if (VERBOSE) { 
+			System.out.print(s);
+		}
+	}
 	private static void println(String s) {
 		if (VERBOSE) { 
 			System.out.println(s);
@@ -98,8 +104,8 @@ public class BirthdayList {
 	static public BirthdayList readBirthdaysFromFile2Json( final String user ) {
 	    ObjectMapper mapper = new ObjectMapper();
 	    BirthdayList bl = new BirthdayList();
-		String pathname = "G:\\Privat\\Frank\\PRIVAT\\Fingerübungen\\airhack_adam_bien\\Frank42L-examples\\geburtstagsliste\\src\\data\\" + user + ".json";
-		System.out.print("Username = " + user);
+		String pathname = SERVER_SIDE_DATA_DIR + user + ".json";
+		print("Username = " + user);
 		File f = Paths.get(pathname).toFile();
 	    try {
 	    	bl = mapper.readValue(f, BirthdayList.class);
@@ -112,8 +118,8 @@ public class BirthdayList {
 		return bl;
 	} 
 	
-	static private File getFileAndCreateIfNotExists( final String user ) throws IOException {
-		String pathname = "G:\\Privat\\Frank\\PRIVAT\\Fingerübungen\\airhack_adam_bien\\Frank42L-examples\\geburtstagsliste\\src\\data\\" + user + ".json";
+	static public File getFileAndCreateIfNotExists( final String user ) throws IOException {
+		String pathname = SERVER_SIDE_DATA_DIR + user + ".json";
 		println("Username = " + user);
 		File f = Paths.get(pathname).toFile();
 			if (f.createNewFile()) {

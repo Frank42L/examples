@@ -23,8 +23,12 @@ import com.javahelps.jerseydemo.services.BirthdayList;
 public class BirthdayListReadonlyTest extends BirthdayListTestBase
 {
     private static final String USER_NAME_READONLY_TEST = "BirthdayList.readonly.unit.test";
+    private static final String USER_NAME_READONLY_TEST_2 = "BirthdayList.readonly.2.unit.test";
+    private static final String USER_NAME_MERGE_TEST_1 = "BirthdayList.mergetest.1.unit.test";
+    private static final String USER_NAME_MERGE_TEST_2 = "BirthdayList.mergetest.2.unit.test";
+    private static final String USER_NAME_MERGE_TEST_3 = "BirthdayList.mergetest.3.unit.test";
 
-	private static boolean initialized = false;
+    private static boolean initialized = false;
 	
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -39,6 +43,10 @@ public class BirthdayListReadonlyTest extends BirthdayListTestBase
 	synchronized void setUp() throws Exception {
 		if (!initialized) {
 	        postFile(getUriWithUser(USER_NAME_READONLY_TEST, ""), "t_02_01.readonly.regression.json", "setUp with t_02_01.readonly.regression.json");
+	        postFile(getUriWithUser(USER_NAME_READONLY_TEST_2, ""), "t_02_02.readonly.regression.json", "setUp with t_02_02.readonly.regression.json");
+	        postFile(getUriWithUser(USER_NAME_MERGE_TEST_1, ""), "t_04_01.mergetest.regression.json", "setUp with t_04_01.mergetest.regression.json");
+	        postFile(getUriWithUser(USER_NAME_MERGE_TEST_2, ""), "t_04_02.mergetest.regression.json", "setUp with t_04_02.mergetest.regression.json");
+	        postFile(getUriWithUser(USER_NAME_MERGE_TEST_3, ""), "t_04_03.mergetest.regression.json", "setUp with t_04_03.mergetest.regression.json");
 	        initialized = true;
 		}
 	}
@@ -86,17 +94,35 @@ public class BirthdayListReadonlyTest extends BirthdayListTestBase
     public void testDeduplicationOfSeveralFiles()
     {
         BirthdayList bl = restCallGetFile( 
-        		getUriAllUsers("/Muster/Hans?user=frank.loeliger&user=irene.troxler"), "");
-    	printBirthdays("testDeduplicationOfSeveralFiles", bl);
-    	assertEquals(3, bl.getBirthdays().size());
+        		getUriAllUsers("/Muster/Frank?user=BirthdayList.mergetest.1.unit.test&user=BirthdayList.mergetest.2.unit.test"), "");
+    	printBirthdays("testDeduplicationOfSeveralFiles", bl, true);
+    	assertEquals(2, bl.getBirthdays().size());
     }
 
     @Test    
     public void testDeduplicationOfThreeFiles()
     {
         BirthdayList bl = restCallGetFile(
-        		getUriAllUsers("/Loeliger/Frank?user=frank.loeliger&user=frank.loeliger.test&user=irene.troxler"), "");
-    	printBirthdays("testDeduplicationOfThreeFiles", bl);
-		assertEquals(2, bl.getBirthdays().size());
+        		getUriAllUsers("/Muster/Frank?user=BirthdayList.mergetest.1.unit.test&user=BirthdayList.mergetest.2.unit.test&user=BirthdayList.mergetest.3.unit.test"), "");
+    	printBirthdays("testDeduplicationOfThreeFiles", bl, true);
+		assertEquals(3, bl.getBirthdays().size());
     }
+    
+    @Test    
+    public void testDeduplicationOfThreeFiles2()
+    {
+        BirthdayList bl = restCallGetFile(
+        		getUriAllUsers("/Muster/Irène?user=BirthdayList.mergetest.1.unit.test&user=BirthdayList.mergetest.2.unit.test&user=BirthdayList.mergetest.3.unit.test"), "");
+    	printBirthdays("testDeduplicationOfThreeFiles", bl, true);
+		assertEquals(1, bl.getBirthdays().size());
+    }
+    @Test    
+    public void testDeduplicationOfMultipleFiles()
+    {
+        BirthdayList bl = restCallGetFile(
+        		getUriAllUsers("?user=BirthdayList.readonly.unit.test&user=BirthdayList.readonly.2.unit.test"), "");
+    	printBirthdays("testDeduplicationOfMultipleFiles", bl, true);
+		assertEquals(10, bl.getBirthdays().size());
+    }
+
 }

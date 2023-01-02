@@ -65,3 +65,20 @@ li {
   margin-inline-end: 0em;
   border: 0px gray dotted;
 }
+button {
+  font-size: 1em;
+  padding: 0.6em 1.3em;
+  color: rgb(224, 226, 253);
+  background-color:  rgb(91, 107, 245);
+  border: 1px solid lightgray;
+  border-radius: 1em;
+  transition-duration: 0.4s;
+  box-shadow: 0 0px 0px 0 rgba(0,0,0,0.2), 
+              0 0px 0px 0 rgba(0,0,0,0.19);
+}
+button:hover {
+  background-color: darkblue;
+  color: white;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.24), 
+              0 8px 20px 0 rgba(0,0,0,0.19);
+}

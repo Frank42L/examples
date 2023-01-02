@@ -3,14 +3,11 @@ package name.loeliger.frank.birthdaylist2test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.ParseException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -23,7 +20,9 @@ import org.apache.http.util.EntityUtils;
 import org.junit.jupiter.api.DisplayName;
 
 import com.javahelps.jerseydemo.services.BirthDayPerson;
+import com.javahelps.jerseydemo.services.BirthdayConfig;
 import com.javahelps.jerseydemo.services.BirthdayList;
+import com.javahelps.jerseydemo.services.MonthConfig;
 
 
 
@@ -74,6 +73,25 @@ public class BirthdayListTestBase
 		} 
     	assertTrue(bl != null);
     	return bl;
+    }
+	
+	protected BirthdayConfig restCallGetConfigFile(String restUri, String comment) {
+		BirthdayConfig config = null;
+    	
+    	try {
+			HttpGet httpGet = new HttpGet(restUri);
+			CloseableHttpClient httpclient = HttpClients.createDefault();
+			CloseableHttpResponse response = httpclient.execute(httpGet);
+			String str = null;
+			str = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+			assertResponse(response, str);
+			InputStream isResponse = new ByteArrayInputStream(str.getBytes(StandardCharsets.UTF_8));
+			config = BirthdayConfig.getBirthdayConfigFromStream(isResponse, comment);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+    	assertTrue(config != null);
+    	return config;
     }
 
     private BirthdayList restCallPostFile(String restUri, String resourceFileName, String restCallMethod, String comment) {
@@ -138,9 +156,9 @@ public class BirthdayListTestBase
     	return bl;
     }
     
-    protected void printBirthdays(String strTitle, BirthdayList bl) {
+    protected void printBirthdays(String strTitle, BirthdayList bl, boolean info) {
 	
-		if (VERBOSE) {
+		if (VERBOSE || info) {
 			Iterator<BirthDayPerson> iter;
 			BirthDayPerson p;
 			iter = bl.getBirthdays().iterator();
@@ -157,6 +175,28 @@ public class BirthdayListTestBase
 
     }
     
+    protected void printConfig(String strTitle, BirthdayConfig config, boolean info) {
+    	
+		if (VERBOSE || info) {
+			Iterator<MonthConfig> iter;
+			MonthConfig monthConfig;
+			iter = config.getMonths().iterator();
+			System.out.println("");
+			System.out.println("<"+ strTitle + ">");
+			while (iter.hasNext())
+			{
+				monthConfig = iter.next();
+				System.out.println("\t" + monthConfig.toString());
+			}
+			System.out.println("\t" + "Total " + config.getMonths().size() + " Monatskonfigurationen" );
+			System.out.println("");
+		} 		
+
+    }
+    
+    protected void printBirthdays(String strTitle, BirthdayList bl) {
+    	printBirthdays(strTitle, bl, false);
+    }
 
     protected BirthdayList restCallPostFile(String restUri, String resourceFileName, String comment) {
     	return restCallPostFile(restUri, resourceFileName, null, comment);
