@@ -16,3 +16,9 @@
   /* border: 1px red dotted; */
 }
 
+/* print styles */
+@media print {
+  .stzh-mk-birthday-month {
+    break-inside: avoid;
+  }
+}

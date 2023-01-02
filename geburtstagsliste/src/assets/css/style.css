@@ -82,3 +82,41 @@ button:hover {
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.24), 
               0 8px 20px 0 rgba(0,0,0,0.19);
 }
+
+/* Screen  styles */
+@media screen {
+  footer {
+    display: none;
+  }
+}
+
+/* print styles */
+@media print {
+  body {
+    color: black;
+  }
+
+  h1 {
+    display: none;
+  }
+
+  @page {
+    size : A4 landscape;
+    margin-top: 0.5cm;
+    margin-left: 1.5cm;
+    margin-right: 1.5cm;
+    margin-bottom: 1.5cm;
+  }
+
+  footer {
+    position: fixed;
+    bottom: 0cm;
+  }
+
+  .page-number:before {
+    counter-increment: page;
+    content: "Seite " counter(page);
+  }
+
+}
+

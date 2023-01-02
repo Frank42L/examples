@@ -45,4 +45,25 @@
 .stzh-mk-birthday-day.stzh-mk-birthday-hash {
   font-size: xx-small;
 }
-    
+
+/* print styles */
+@media print {
+  .stzh-mk-birthday-day-badge {
+    background-color: white;
+    border: 0px black none;
+    color: black;
+    font-size: 0.9em;
+    padding: 0em;
+    margin: 0em;
+  }
+  .stzh-mk-birthday-day {
+    font-size: 0.9em;
+    border-top: 0px black none;
+    border-left: 0px black none;
+    border-right: 0px black none;
+    border-bottom: 1px black dashed;
+    border-radius: 0em;
+    padding: 0em;
+    line-height: 0.97em;
+  }
+}
