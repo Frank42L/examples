@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="assets/css/style_core_elements.css">
     <link rel="stylesheet" href="assets/css/style_mk.css">
     <link rel="stylesheet" href="assets/css/style_mk_birthday.css">
+    <link rel="stylesheet" href="assets/css/style_mk_tabinterface.css">
     <link rel="stylesheet" href="assets/css/rwrd_simulation.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -18,7 +19,7 @@
             const parsed_d = parseInt(day, 10);
             const parsed_m = parseInt(month, 10);
             const parsed_y = parseInt(year, 10);
-            const today = new Date();
+            const today = new Date(); 
             var d2 = 0;
             var d1 = 0;
             if (isNaN(parsed_d) || parsed_d <= 0) {return -1;}
@@ -31,9 +32,11 @@
 
         function prepareMonths() {
             var item_months = [];
+            var user = "frank.loeliger";
 
-            $.getJSON( "data/frank.loeliger.config.json", function( data ) {
-                $.each( data.Months, function( key, val ) {
+            $.getJSON("http://localhost:8080/jerseydemo/birthdays/user/" + user + "/config", function( data ) {
+            // $.getJSON( "../../../Geburtstagsliste/data_clientside/frank.loeliger.config.json", function( data ) {
+                $.each( data.months, function( key, val ) {
                     item_months.push( "<stzh-mk-birthday-month id='month_" + val.cnt + "'><span slot='month'>" 
                         + val.month + "</span>" 
                         + "</stzh-mk-birthday-month>" );
@@ -41,9 +44,22 @@
 
                 $( "<stzh-mk-birthday-board/>", {
                     "title": "Geburtstage",
-                    html: "<span slot='title'>Geburtstagsliste 42a</span>"+item_months.join( "" )
+                    html: "<span slot='title'>Geburtstagsliste</span>"+item_months.join( "" )
                 }).appendTo( "body" );
             });
+        }
+
+        function resetMonths() {
+            var childElements = document.getElementsByTagName("stzh-mk-birthday-board");
+            /* console.log("childElement = " + childElements);
+            console.log("      length = " + childElements.length); */
+            if (childElements && childElements.length > 0){
+                var parentNode  = childElements[0].parentNode;
+                /* console.log("childElement = " + childElements[0]);
+                console.log("parentNode  = " + parentNode); */
+                parentNode.removeChild(childElements[0]);
+            }
+            prepareMonths();
         }
 
         function createDayIfNotExists(month, day) {
@@ -64,7 +80,7 @@
         function birthdayExists(val) {
             if( $("#person_hash_"+ val.hash).length )  
             { 
-                console.log ("person_hash_"+ val.hash + " exists (" + val.firstname + " " + val.surname + ")");
+                // console.log ("person_hash_"+ val.hash + " exists (" + val.firstname + " " + val.surname + ")");
                 return true;
             }
             return false;
@@ -115,7 +131,7 @@
         }
 
         function addBirthdays(user) {
-                console.log ("Laden " + user);
+                // console.log ("Laden " + user);
 
                $.getJSON("http://localhost:8080/jerseydemo/birthdays/user/" + user, function( data ) {
 
@@ -142,53 +158,129 @@
 
     </script>
 
-    <h1>Geburtstagsliste - Test</h1>
+    <h1>Geburtstagsliste</h1>
 
-    <h2>Testen des Uploads</h2>
+    <stzh-mk-tabinterface>
+        <stzh-mk-tabinterface-panel title="Home">
+            <span slot='tabSubTitle'>Home</span>
+            <stzh-mk-button  onclick="resetMonths();">
+                <span slot='button_text'>Liste leeren</span>
+            </stzh-mk-button>  
+        </stzh-mk-tabinterface-panel>
+        <stzh-mk-tabinterface-panel title="Laden">
+            <span slot='tabSubTitle'>Geburtstage Laden</span>
+            <stzh-mk-button  onclick="resetMonths();">
+                <span slot='button_text'>Clear</span>
+            </stzh-mk-button>  
+            <stzh-mk-button  onclick="addBirthdays('BirthdayList.readonly.unit.test');">
+                <span slot='button_text'>Readonly</span>
+            </stzh-mk-button>
+            <stzh-mk-button  onclick="addBirthdays('BirthdayList.readonly.2.unit.test');">
+                <span slot='button_text'>Readonly 2</span>
+            </stzh-mk-button>
+            <stzh-mk-button  onclick="addBirthdays('BirthdayList.mergetest.1.unit.test');">
+                <span slot='button_text'>Merge 1</span>
+            </stzh-mk-button>
+            <stzh-mk-button  onclick="addBirthdays('BirthdayList.mergetest.2.unit.test');">
+                <span slot='button_text'>Merge 2</span>
+            </stzh-mk-button>
+            <stzh-mk-button  onclick="addBirthdays('BirthdayList.mergetest.3.unit.test');">
+                <span slot='button_text'>Merge 3</span>
+            </stzh-mk-button>           
+            <stzh-mk-button  onclick="addBirthdays('BirthdayList.unit.test');">
+                <span slot='button_text'>All</span>
+            </stzh-mk-button>  
+            <stzh-mk-button  onclick="addBirthdays('frank.loeliger.csv');">
+                <span slot='button_text'>frank.loeliger.csv</span>
+            </stzh-mk-button>
+            <stzh-mk-button  onclick="addBirthdays('frank.loeliger');">
+                <span slot='button_text'>frank.loeliger</span>
+            </stzh-mk-button>
+            <stzh-mk-button  onclick="addBirthdays('irene.troxler');">
+                <span slot='button_text'>irene.troxler</span>
+            </stzh-mk-button>
+        </stzh-mk-tabinterface-panel>
+        <stzh-mk-tabinterface-panel title="CSV">
+            <span slot='tabSubTitle'>CSV Hochladen</span>
+            <h3>CSV Format prüfen</h3>
+            <form action="http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.test.csv/verifyformat" 
+                    method="post"
+                    enctype="multipart/form-data"
+                    content-type="charset=utf-8">
+                <p>Checke das Format der CSV Datei</p>
+                <label for="upload_file">CSV To be Verified</label>
+                <input type="file" id="upload_file" name="file" accept="application/csv">
+                <input type="submit">
+            </form>
+            <h3>CSV Auswählen und hochladen</h3>
+            <form action="http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.csv" 
+                    method="post"
+                    enctype="multipart/form-data"
+                    content-type="charset=utf-8">
+                <p>Ersetze die Geburtstagsliste von frank.loeliger.csv vollständig (Create/Replace)</p>
+                <label for="upload_file">Upload CSV</label>
+                <input type="file" id="upload_file" name="file" accept="application/csv">
+                <input type="submit">
+            </form>
+        </stzh-mk-tabinterface-panel>
+        <stzh-mk-tabinterface-panel title="Beta">
+            <span slot='tabSubTitle'>Beta</span>
+            <h2>Testen des Uploads</h2>
 
-    <h3>Bitte korrekt formatierte Files hochladen</h3>
+            <h3>Bitte korrekt formatierte Files hochladen</h3>
 
-    <form action="http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.test" 
+            <form action="http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.test" 
+                    method="post"
+                    enctype="multipart/form-data"
+                    content-type="charset=utf-8">
+                <p>Ersetze die Geburtstagsliste vollständig (Create/Replace)</p>
+                <label for="upload_file">Create or Replace</label>
+                <input type="file" id="upload_file" name="file" accept="application/json">
+                <input type="submit">
+            </form>
+
+            <form action="http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.test" 
             method="post"
-            enctype="multipart/form-data"
-            content-type="charset=utf-8">
-        <p>Ersetze die Geburtstagsliste vollständig (Create/Replace)</p>
-        <label for="upload_file">Create or Replace</label>
-        <input type="file" id="upload_file" name="file" accept="application/json">
-        <input type="submit">
-    </form>
+            enctype="multipart/form-data">
+                <p>Ergänze die Geburtstagsliste (Update)</p>
+                <input type="hidden" name="_rest_method" value="patch">
+                <label for="update_file">Update</label>
+                <input type="file" id="update_file" name="file" accept="application/json">
+                <input type="submit">
+            </form>
 
-    <form action="http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.test" 
-    method="post"
-    enctype="multipart/form-data">
-        <p>Ergänze die Geburtstagsliste (Update)</p>
-        <input type="hidden" name="_rest_method" value="patch">
-        <label for="update_file">Update</label>
-        <input type="file" id="update_file" name="file" accept="application/json">
-        <input type="submit">
-    </form>
+        </stzh-mk-tabinterface-panel>
+    </stzh-mk-tabinterface>
+
+
 
     <script>
         var urlShow = "http://localhost:8080/jerseydemo/birthdays/user/";
         var urlUpload = "http://localhost:8080/jerseydemo/birthdays/user/";
 
         prepareMonths();
-        addUploadButton("Show Irène", urlShow + "irene.troxler");
-        addUploadButton("Show Frank", urlShow + "frank.loeliger");
+        /*addUploadButton("Show Irène", urlShow + "irene.troxler");
+        addUploadButton("Show Frank", urlShow + "frank.loeliger");*/
+
         // addUploadButton("Upload Test", urlUpload + "frank.loeliger.test");
-        addBirthdays("irene.troxler");      
-        addBirthdays("frank.loeliger");      
-        addBirthdays("regression.test");      
+        //addBirthdays("irene.troxler");      
+        //addBirthdays("frank.loeliger");      
+        addBirthdays("BirthdayList.readonly.unit.test");      
+        addBirthdays("BirthdayList.readonly.2.unit.test");      
     </script>
 
+    
 
     <script src="skzMkDashboard.js" type="module"></script>
     <script src="skzMkDashboardCard.js" type="module"></script>
     <script src="skzMkCallToAction.js" type="module"></script>
+    <script src="skzMkButton.js" type="module"></script>
     <script src="skzMkBirthdayBoard.js" type="module"></script>
     <script src="skzMkBirthday.js" type="module"></script>
     <script src="skzMkBirthdayWithAge.js" type="module"></script>
     <script src="skzMkBirthdayMonth.js" type="module"></script>
     <script src="skzMkBirthdayDay.js" type="module"></script>
+    <script src="skzMkTabInterface.js" type="module"></script>
+    <script src="skzMkTabInterfacePanel.js" type="module"></script>
 </body>
 </html>

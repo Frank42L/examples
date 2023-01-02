@@ -1,5 +1,5 @@
 {
-    "Months": [
+    "months": [
         {"cnt":"1", "month":"Januar",    "month_short":"Jan", "month_number": "01"},
         {"cnt":"2", "month":"Februar",   "month_short":"Feb", "month_number": "02"},
         {"cnt":"3", "month":"März",      "month_short":"Mär", "month_number": "03"},
@@ -12,6 +12,6 @@
         {"cnt":"10","month":"Oktober",   "month_short":"Okt", "month_number": "10"},
         {"cnt":"11","month":"November",  "month_short":"Nov", "month_number": "11"},
         {"cnt":"12","month":"Dezember",  "month_short":"Dez", "month_number": "12"},
-        {"cnt":"0", "month":"Unbekannter Geburtstag",         "month_short":"0"  , "month_number": "0" }
+        {"cnt":"0", "month":"Unbekannte Geburtstage",         "month_short":"0"  , "month_number": "0" }
     ]
 }

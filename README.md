@@ -30,6 +30,8 @@ eclipse starten
 
 # junit/Maven Helper
 https://maven.apache.org/guides/getting-started/index.html#How_do_I_setup_Maven
+- https://repo.maven.apache.org/maven2/.
+- /maven2/log4j/log4j.
 
 # Tomcat (Falls keine Entwicklung)
 Start mit
@@ -48,7 +50,6 @@ http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger/Loeliger/Frank
 http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger/Muster/Hans
 http://localhost:8080/jerseydemo/birthdays/users/Muster/Hans?user=frank.loeliger&user=irene.troxler
 
-http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.test/upload
 http://localhost:8080/jerseydemo/emailverification/frank.loeliger@bluewin.ch
 http://localhost:8080/jerseydemo/emailsending/mail@frank.loeliger.name
 

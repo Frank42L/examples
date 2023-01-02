@@ -11,6 +11,9 @@
 		{
 			"name": "first-steps",
 			"path": "..\\..\\first-steps"
+		},
+		{
+			"path": "../.."
 		}
 	],
 	"settings": {}

@@ -7,9 +7,11 @@
 
 .stzh-mk-birthday-board {
     border: 2px darkblue solid;
+    border-radius: 0.5em;
     margin-block-start: 1em;
     margin-block-end: 1em;
     margin-inline-start: 0em;
-    margin-inline-end: 0em;
-    padding: 0.2em 0.2em 0.2em 0.2em;
+    margin-inline-end: 1em;
+    padding: 0.2em 1em 0.2em 0.2em;
+    background-color: whitesmoke;
   } 

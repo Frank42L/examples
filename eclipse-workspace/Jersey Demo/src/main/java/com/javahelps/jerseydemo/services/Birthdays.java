@@ -1,7 +1,10 @@
 package com.javahelps.jerseydemo.services;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Iterator;
 
 import javax.ws.rs.Consumes;
@@ -14,6 +17,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVFormat.Builder;
+import org.apache.commons.csv.CSVFormat.Predefined;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
@@ -33,6 +41,36 @@ public class Birthdays {
 			System.out.println(s);
 		}
 	}
+	private static void println(String s, boolean info) {
+		if (VERBOSE || info) { 
+			System.out.println(s);
+		}
+	}
+	
+    static final Character SEMICOLON = Character.valueOf(';');
+
+
+    /**
+     * Standard Semicolon Separated Value format, as for {@link #RFC4180} but allowing empty lines.
+     *
+     * <p>
+     * The {@link Builder} settings are:
+     * </p>
+     * <ul>
+     * <li>{@code setDelimiter(';')}</li>
+     * <li>{@code setQuote('"')}</li>
+     * <li>{@code setRecordSeparator("\r\n")}</li>
+     * <li>{@code setIgnoreEmptyLines(true)}</li>
+     * <li>{@code setAllowDuplicateHeaderNames(true)}</li>
+     * <li>{@code setHeader()}</li>
+     * </ul>
+     *
+     * @see Predefined#Default
+     */
+    public static final CSVFormat DEFAULT_SEMICOLON = CSVFormat.DEFAULT.builder()
+    		.setHeader()
+    		.setDelimiter(SEMICOLON).build();
+
 
 
 	@GET
@@ -44,7 +82,18 @@ public class Birthdays {
         		.entity(json)
         		.build();
     }
-    
+    	
+    @GET
+    @Path("/config")
+    @Produces("text/plain")
+    public Response getConfigrationForPerson(@PathParam("user") String user) {
+    	String json;
+    	json = BirthdayConfig.readConfigFromFile2Json(user).toJson();
+    	return Response.ok() // 200
+        		.entity(json)
+        		.build();
+    }
+
     @GET
     @Path("/{surname}/{firstname}")
     @Produces("text/plain")
@@ -180,9 +229,9 @@ public class Birthdays {
 	}
     
 	
-    private Response uploadBirthdayList(@PathParam("user") String user,
-    		@FormDataParam("file") InputStream uploadedInputStream,
-    		@FormDataParam("file") FormDataContentDisposition fileDetail) {
+    private Response uploadBirthdayListFromJSON(String user,
+    		InputStream uploadedInputStream,
+    		FormDataContentDisposition fileDetail) {
     	String json;  	
 		BirthdayList bl;
     	
@@ -198,6 +247,125 @@ public class Birthdays {
         return Response.ok() // 200
         		.entity(json)
         		.build();
+    }
+   
+    private Response uploadBirthdayListFromCSV(String user,
+    		InputStream uploadedInputStream,
+    		FormDataContentDisposition fileDetail) {
+    	String json;  	
+	   	BirthdayList blAll;
+    	BirthdayList blToMerge;
+ 	
+		CSVParser parser;
+		Reader reader = new InputStreamReader(uploadedInputStream);
+		int ignoredRows = 0;
+		int processedRows = 0;
+		String ignored = " rows ignored because of missing ";
+		String ignoredPrename = "\tprename:\t";
+		String ignoredSurname = "\tsurname:\t";
+		String ignoredBirthdate = "\tbirthdate:\t";
+    	
+    	println("Upload and Replace (user = " + user + ") with File : " + fileDetail.getFileName());
+    	
+		blToMerge = new BirthdayList();
+
+    	try {
+    		parser = CSVParser.parse(reader, Birthdays.DEFAULT_SEMICOLON);
+    		for (String sHeader : parser.getHeaderNames()) {
+    			println("\t" + sHeader, true);    			
+    		}
+    		for (CSVRecord record : parser) {
+    			String prename = record.get(2);
+    			String surname = record.get(1);
+    			String dateWithYear = record.get(18);
+    			String dateWithoutYear = record.get(19);
+    			
+    			if (prename.isEmpty()) {
+    				ignoredRows++;
+    				if (ignoredPrename.length() > 10) {ignoredPrename += ",";} 
+    				ignoredPrename += record.getRecordNumber();	
+    			} else if (surname.isEmpty()) {
+    				ignoredRows++;
+    				if (ignoredSurname.length() > 10) {ignoredSurname += ",";} 
+    				ignoredSurname += record.getRecordNumber();
+    			} else if (dateWithYear.isEmpty() && dateWithoutYear.isEmpty()) {
+    				ignoredRows++;
+    				if (ignoredBirthdate.length() > 12) {ignoredBirthdate += ",";} 
+    				ignoredBirthdate += record.getRecordNumber();
+    			} else {
+    				String date;
+    				String sDay;
+    				String sMonth;
+    				String sYear;
+    				processedRows++;
+    				if (dateWithYear.isEmpty()) {
+    					date = dateWithoutYear + "0000";
+    				} else {
+    					date = dateWithYear;
+    				}
+    	   			println(record.getRecordNumber() 
+					+ "\t" + prename
+					+ "\t" + surname
+					+ "\t" + date
+					, true);	
+    	   			String[] s = date.split("\\.");
+    	   			sDay = s[0];
+    	   			sMonth = s[1];
+    	   			sYear = s[2];
+    	   			BirthDayPerson p = new BirthDayPerson();
+    	   			p.setFirstname(prename);
+    	   			p.setSurname(surname);
+    	   			p.setDay(Integer.parseInt(sDay));
+    	   			p.setMonth(Integer.parseInt(sMonth));
+    	   			p.setYear(Integer.parseInt(sYear));
+    	   			blToMerge.getBirthdays().add(p);
+    			}	
+    		}
+    		println("Uploading CSV for user " + user + " file " + fileDetail.getFileName(), true);
+    		println("Total " + processedRows + " rows processed and " + ignoredRows + " " + ignored, true);
+    		println(ignoredPrename, true);
+    		println(ignoredSurname, true);
+    		println(ignoredBirthdate, true);
+    		
+        	try {
+            	File f =  BirthdayList.getFileAndCreateIfNotExists(user);
+            	blAll = BirthdayList.readBirthdaysFromFile2Json(user);
+            	blAll = mergeUpdatedValues(blAll, blToMerge);
+    			BirthdayList.writeBirthdays2File(user, blAll);
+    		} catch (IOException e1) {
+    			e1.printStackTrace();
+    		}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+
+      	json = BirthdayList.readBirthdaysFromFile2Json(user).toJson();
+        return Response.ok() // 200
+        		.entity(json)
+        		.build();
+    }
+ 
+    private String getExtension(final String filename) {
+    	String extension = "";
+    	int i = filename.lastIndexOf('.');
+    	if (i > 0) {
+    	    extension = filename.substring(i+1);
+    	}
+    	return extension;
+    }
+
+    private Response uploadBirthdayList(String user,
+    		InputStream uploadedInputStream,
+    		FormDataContentDisposition fileDetail) {
+        String extension = getExtension(fileDetail.getFileName());
+    	if (extension.equalsIgnoreCase("json")) {
+    		return uploadBirthdayListFromJSON(user, uploadedInputStream, fileDetail);
+    	} else if (extension.equalsIgnoreCase("csv")) {
+    		return uploadBirthdayListFromCSV(user, uploadedInputStream, fileDetail);
+    	} else {
+    		return Response.status(404, "<" + extension + "> is not a supported type").build();
+    	}
     }
     
 	@PATCH
