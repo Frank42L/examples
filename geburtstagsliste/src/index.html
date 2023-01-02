@@ -24,7 +24,7 @@
             var d1 = 0;
             if (isNaN(parsed_d) || parsed_d <= 0) {return -1;}
             if (isNaN(parsed_m) || parsed_d <= 0) {return -1;}
-            if (isNaN(parsed_y)) {return -1;}
+            if (isNaN(parsed_y) || parsed_y <= 0) {return -1;}
             d2 = parsed_y*10000 + parsed_m*100 + parsed_d;
             d1 = today.getFullYear()*10000 + (today.getMonth()+1)*100 + today.getDate();
             return Math.trunc((d1-d2)/10000);
@@ -63,17 +63,42 @@
         }
 
         function createDayIfNotExists(month, day) {
-            if( $("#month_"+ month + "_" + day).length )  
+            var elem;
+            var elemDayAfter = null;
+            var idOfDayAfter = null;
+            var elemMonth    = $("#month_" + month);
+            var elemMonthDay = $("#month_" + month + "_" + day);
+            if( elemMonthDay && elemMonthDay.length )  
             { 
                 // console.log ("month_"+ month + "_" + day+" exists");
             } else 
             {
-                // console.log("month_"+ month + "_" + day+" does not exist");
-                $( "<stzh-mk-birthday-day id='month_"+ month + "_" + day+"'> "
-                    + "<span slot='day'>" + day + "</span>"
-                    + "</stzh-mk-birthday-day>"
-                ).appendTo( $("#month_" + month) );
-                // TODO - Order along day
+                // search first day which is before the new day
+                // console.log("month_"+ month + "_" + day +" does not exist");
+                var children = elemMonth.find("stzh-mk-birthday-day");
+                if (children && children.length > 0) {
+                    // console.log("month has already " + children.length + " days");
+                    children.each( function(index, child) {
+                        var parts = child.id.split('_');
+                        // console.log("child " + index + ":" + parts[0] + " " + parts[1] + " " + parts[2]);
+                        var dayCurrent = parseInt(parts[2]);
+                        if (elemDayAfter == null && dayCurrent > day) {
+                            elemDayAfter = child;
+                            idOfDayAfter = "#" + child.id;
+                        }
+                    });
+                }
+                // add now
+                if (elemDayAfter != null) {
+                    $( "<stzh-mk-birthday-day id='month_"+ month + "_" + day+"'> "
+                        + "<span slot='day'>" + day + "</span>"
+                        + "</stzh-mk-birthday-day>").insertBefore(idOfDayAfter);
+                } else {
+                    $( "<stzh-mk-birthday-day id='month_"+ month + "_" + day+"'> "
+                        + "<span slot='day'>" + day + "</span>"
+                        + "</stzh-mk-birthday-day>"
+                    ).appendTo( $("#month_" + month) );
+                }
             }
         }
 
