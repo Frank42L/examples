@@ -120,4 +120,5 @@ UM MIT BRANCHES Arbeiten zu können:
  --> Gute Erklärung unter https://blog.seibert-media.net/blog/2015/08/05/git-mit-branches-arbeiten-git-merge/
     - Fast-forward (rebasing) -> Niemand sonst hat gebranchet
     - 3-way-merge -> falls es einen anderen Branche gibt.
+    
 
