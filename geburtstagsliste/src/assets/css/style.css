@@ -90,6 +90,7 @@ button:hover {
   }
 }
 
+
 /* print styles */
 @media print {
   body {
@@ -101,21 +102,34 @@ button:hover {
   }
 
   @page {
+    color: black;
     size : A4 landscape;
-    margin-top: 0.5cm;
+    margin-top: 1.5cm;
     margin-left: 1.5cm;
     margin-right: 1.5cm;
     margin-bottom: 1.5cm;
+    counter-reset: pageNumber 10;
+    /* folgendes funktion Stand Nov 2022 noch in keinem Broser, leider */
+    /* @top-left {
+      content: " Seite " counter(page);
+    };
+    @top-right {
+      content: "hallo";
+    };
+    @top-center {
+      content: "test";
+    }*/
   }
 
+  
   footer {
     position: fixed;
     bottom: 0cm;
   }
-
-  .page-number:before {
-    counter-increment: page;
-    content: "Seite " counter(page);
+  
+  .page-number::before {
+    counter-increment: pageNumber;
+    /* content: "Seite XXXXXX" counter(pageNumber);*/
   }
 
 }

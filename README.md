@@ -11,19 +11,25 @@
   (Program befindet sich hier: C:\Users\Frank\AppData\Local\Programs\Git\usr\bin\mintty)
   cd /G/Privat/Frank/PRIVAT/Fingerübungen/airhack_adam_bien/Frank42L-examples
 
+# Serverseitig 
+5) http://tomcat:8080/BirthdayList/birthdays/user/frank.loeliger 
+6) powershell und SSH zu Development server (keypass)
+   (SSH {USERNAME}@192.168.1.119{ENTER}{DELAY 2000}{PASSWORD}{ENTER})
+7) sudo docker exec -it tomcat1 bash
+8) cd logs
+9) tail -f catalina.yyyy-mm-dd.log
+10) Verzeichnis  /tomcat  (Docker) -> /volume1/webservices2/tomcat (NAS)
+11) Export WAR FEil (Jerseydemo) to C:\temp
+12) tomcat:8080/manager/html INstallieren WAR Datei
 
-#usefull ressources
+
+# usefull ressources
 Console.dir($1)
 
 #usefull ressources Online
 MDN Mozilla Developer Network https://developer.mozilla.org/de/
 https://www.github.com (Frank42L)
 
-
-# Mein Konto Reference Seite
-original auf: dece.stadt-zuerich.ch/refpage und neu auf designsystem.stadt-zuerich.ch
-A) G:\Privat\Frank\PRIVAT\Fingerübungen\reference_styles\stzhrwrd-meinkonto 2018-06-22 18_53_24\prod\index_mein_konto.html
-B)file:///G:/Privat/Frank/PRIVAT/Finger%C3%BCbungen/reference_styles/v7-13-3/index_mein_konto.html
 
 # Entwicklungsumgebung
 eclipse starten
@@ -56,8 +62,6 @@ http://localhost:8080/jerseydemo/emailsending/mail@frank.loeliger.name
 Ersatz der aller Geburtstage: POST http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.test mit JSON File
 Hinzufügen falls noch nicht drin: PATCH http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.test mit JSON File
 
-
-
   
 # examples GIT
 Eigene Beispiele auf Github
@@ -67,6 +71,7 @@ Eigene Beispiele auf Github
 - vierter Schritt - Gehversuch mit Pull Request (secondpull)
 
 Git Start:
+- Starte Gitbasch
 - Startverzeichnis: /G/Privat/Frank/PRIVAT/Fingerübungen/airhack_adam_bien/Frank42L-examples
 - git diff 
 
@@ -154,16 +159,29 @@ UM MIT BRANCHES Arbeiten zu können:
       -> Details (Terminal), um "reinzuschauen" oder
       -> sudo docker exec -it tomcat1 bash 
   - Einrichten Manager Console Tomcat (Manuell)
-      - cd /volume1/Webservices/tomcat
+      - cd /volume1/webservices2/tomcat
       - sudo docker cp tomcat1:/usr/local/tomcat/conf/tomcat-users.xml .
       - vi tomcat-users.xml (add user tomcatadmin and tomcatdeploy))
           <tomcat-users xmlns="http://tomcat.apache.org/xml"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"
               version="1.0">
+          <role rolename="manager-gui"/>
+          <role rolename="manager-script"/>
+          <role rolename="admin-gui"/>
+          <role rolename="admin-script"/>
           <user username="tomcatadmin" password="<must be changed>" roles="manager-gui, manager-script"/>
           <user username="tomcatdeploy" password="<must be changed>" roles="manager-script"/>
+          <user username="tomcathostmanagergui" password="<must be changed>" roles="admin-gui"/>
+          <user username="tomcathostmanagerscript" password="<must be changed>" roles="admin-script"/>
       - sudo docker cp ./tomcat-users.xml tomcat1:/usr/local/tomcat/conf
+      - sudo docker exec -it tomcat1 bash
+          cd /usr/local/tomcat/conf
+          chown root:root tomcat-users.xml
+          chmod 644 tomcat-users.xml
+          catalina.sh stop    [stopped aber auch gleich den Container, der dann automatisch neu gestartet wird]
+
+
       - sudo docker cp tomcat1:/usr/local/tomcat/webapps/manager/META-INF/context.xml .
       - vi context.html (portforwarding)
            <Context antiResourceLocking="false" privileged="true" >
@@ -176,10 +194,37 @@ UM MIT BRANCHES Arbeiten zu können:
       - sudo docker cp context.xml tomcat1:/usr/local/tomcat/webapps/manager/META-INF/
       - sudo docker exec -it tomcat1 bash
           cd webapps/manager/META-INF/
-          chwon root:root context.xml
-          chmod 755 context.xml
+          chown root:root context.xml
+          chmod 644 context.xml
           catalina.sh stop    [stopped aber auch gleich den Container, der dann automatisch neu gestartet wird]
 
+      - sudo docker cp tomcat1:/usr/local/tomcat/conf/Catalina/localhost/host-manager.xml .
+      - vi host-manager.xml 
+          <Context privileged="true" antiResourceLocking="false" 
+              docBase="{catalina.home}/webapps/host-manager">
+              <Valve className="org.apache.catalina.valves.RemoteAddrValve" allow="^.*$" />
+          </Context>
+      - sudo docker cp host-manager.xml tomcat1:/usr/local/tomcat/conf/Catalina/localhost/
+      - sudo docker exec -it tomcat1 bash
+          cd /usr/local/tomcat/conf/Catalina/localhost/
+          chown root:root host-manager.xml
+          chmod 644 host-manager.xml
+          catalina.sh stop    [stopped aber auch gleich den Container, der dann automatisch neu gestartet wird]
+
+    - Servlet "BirthdayList" gegen aussen sichtbar machen
+      - cd /volume1/webservices2/tomcat
+      - sudo docker cp tomcat1:/usr/local/tomcat/webapps/BirthdayList/META-INF/BirthdayList.xml  .
+      - vi BirthdayList.xml (portforwarding)
+          <Context privileged="true" antiResourceLocking="false" 
+              docBase="{catalina.home}/webapps/BirthdayList">
+              <Valve className="org.apache.catalina.valves.RemoteAddrValve" allow="^.*$" />
+          </Context>
+      - sudo docker cp BirthdayList.xml tomcat1:/usr/local/tomcat/webapps/BirthdayList/META-INF/
+      - sudo docker exec -it tomcat1 bash
+          cd webapps/BirthdayList/META-INF/
+          chown root:root BirthdayList.xml
+          chmod 644 BirthdayList.xml
+          catalina.sh stop    [stopped aber auch gleich den Container, der dann automatisch neu gestartet wird]
 
     - Expose the Admin GUI to the host (DS220)
         How to: https://octopus.com/blog/deployable-tomcat-docker-containers
@@ -197,7 +242,7 @@ UM MIT BRANCHES Arbeiten zu können:
         Variante B: Configure in DS220+ (not clear how to change the standard command in DS220+ yet)
                     Or replace "catalina.sh run" by "mv /usr/local/tomcat/webapps /usr/local/tomcat/webapps2; mv /usr/local/tomcat/webapps.dist /usr/local/tomcat/webapps; cp /tmp/context.xml /usr/local/tomcat/w
                     webapps/manager/META-INF/context.xml; catalina.sh run"
-        Variante C: Nach Aufsetzen des Dockerimages manuell (falls noch nicht dort)
+        Variante C (aktuell): Nach Aufsetzen des Dockerimages manuell (falls noch nicht dort)
             sudo docker exec -it tomcat1 bash
                 mv /usr/local/tomcat/webapps /usr/local/tomcat/webapps2
                 mv /usr/local/tomcat/webapps.dist /usr/local/tomcat/webapps
@@ -206,17 +251,12 @@ UM MIT BRANCHES Arbeiten zu können:
                 catalina.sh start
 
           
-            
-
-          
-
-
 
   - Nutzen der Admin Consolen von tomcat
     - http://tomcat:8080                      [tomcat test page]
     - http://tomcat:8080/manager/html         [tomcat manager webapp]
     - http://tomcat:8080/host-manager/html    [tomcat host-manager webapp]
-  - Nutzen des TEXT APIS der Managemen Console
+  - Nutzen des TEXT APIS der Management Console
     - https://www.baeldung.com/tomcat-manager-app
     
 
@@ -302,5 +342,20 @@ Commandline und einige oft gebrauchte unix befehle (neben den üblilchen Standar
       clear                                             [clear terminal screen]
     
 Deploy and run under docker
-  - xxx                                                             [deploy]
-  - http://tomcat:8080/jerseydemo/birthdays/user/frank.loeliger     [Aufruf]
+  Deploy Manually with tomcat manager GUI
+    - tomcat:8080/manager/html
+    - Installieren - 
+        Kontextpfad                = 
+        Version                    = --
+        XML Konfigrationsdatei URL = 
+        WAR oder Verzeichnis URL   = 
+    - INstallieren "*.war uploaden                                  [deploy]
+  - http://tomcat:8080/BirthdayList/birthdays/user/frank.loeliger   [Aufruf]
+
+# Docker Konfiguration
+#   Volume-Einstellungen
+/webservices2/tomcat          gemounted auf /tomcat
+/webservices2/data_serverside gemounted auf /data_serverside
+
+TODO:
+- host_manager wieder deaktivieren!

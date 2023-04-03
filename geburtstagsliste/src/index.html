@@ -15,6 +15,99 @@
 
     <script src="js/jquery.js"></script>
     <script>
+
+        function setVersion(toVersion) {
+            localStorage.setItem("version", toVersion);
+        }
+
+        function getVersion() {
+            return localStorage.getItem("version");
+        }
+
+        function migrateVersion(fromVersion, toVersion) {
+            if (fromVersion === "0.1" && toVersion === "0.2") {
+                alert("Version migration from " + fromVersion + " toVersion " + toVersion + " successfull");
+                setVersion(toVersion);
+            } else {
+                alert("Version migration from " + fromVersion + " toVersion " + toVersion + " failed");
+            }
+        }
+
+        function initLocalStorage(expectedVersion) {
+            var currentVersion = localStorage.getItem("version");
+            if (currentVersion == null) {
+                localStorage.setItem("version", expectedVersion);
+                currentVersion = localStorage.getItem("version");
+            }
+            if (currentVersion == null) {
+                alert("Localstorage is not available, limited functionality");
+            } else if (currentVersion !== expectedVersion) {
+                alert("Version mismatch expected " + expectedVersion + ", actual " + currentVersion);     
+                migrateVersion(currentVersion, expectedVersion);          
+            }
+        }
+
+        function setUserTo(newUser) {
+            localStorage.setItem("currentUser", newUser);
+            document.getElementById('idUser').innerHTML = newUser;
+        }
+
+        function getUser() {
+            var retUser = localStorage.getItem("currentUser");
+            if (retUser == null) {
+                alert("Localstorage is not available and User not yet set, limited functionality");
+            }
+            document.getElementById('idUser').innerHTML = retUser;
+            return retUser;
+        }
+        function initUser(initUser) {
+            var retUser = localStorage.getItem("currentUser");
+            if (retUser == null) {
+                setUserTo(initUser);
+            } else {
+                document.getElementById('idUser').innerHTML = retUser;
+            }
+        }
+
+        function setServerUrl(newServerUrl) {
+            localStorage.setItem("serverUrl", newServerUrl);
+            document.getElementById('idServerURL').innerHTML = newServerUrl;
+        }
+
+        function setServerUrlLocal() {  
+            setServerUrl("http://localhost:8080/jerseydemo/birthdays/");
+        }
+
+        function setServerUrlTomcat() {
+            setServerUrl("http://tomcat:8080/BirthdayList/birthdays/");     
+        }
+
+        function getServerUrl() {
+            var retServerUrl = localStorage.getItem("serverUrl");
+            if (retServerUrl == null) {
+                setServerUrlLocal();
+                retServerUrl = localStorage.getItem("serverUrl");
+                if (retServerUrl == null) {
+                    alert("Localstorage is not available, limited functionality");
+                    retServerUrl = "http://localhost:8080/jerseydemo/birthdays/"; 
+                }
+            }
+
+            document.getElementById('idServerURL').innerHTML = retServerUrl;
+            return retServerUrl;
+        }
+
+        function setActionForUserWithAdditionalResource(form, resourceWithinUser) {
+            var user = getUser();
+            form.action = getServerUrl() + 'user/' + user + resourceWithinUser;
+            alert(form.action);
+            return true;
+        }
+        
+        function getServerUrlWithUser() {
+            return getServerUrl() + "user/";
+        }
+
         function getAge(day, month, year) {
             const parsed_d = parseInt(day, 10);
             const parsed_m = parseInt(month, 10);
@@ -34,7 +127,7 @@
             var item_months = [];
             var user = "frank.loeliger";
 
-            $.getJSON("http://localhost:8080/jerseydemo/birthdays/user/" + user + "/config", function( data ) {
+            $.getJSON(getServerUrlWithUser() + user + "/config", function( data ) {
             // $.getJSON( "../../../Geburtstagsliste/data_clientside/frank.loeliger.config.json", function( data ) {
                 $.each( data.months, function( key, val ) {
                     item_months.push( "<stzh-mk-birthday-month id='month_" + val.cnt + "'><span slot='month'>" 
@@ -158,7 +251,7 @@
         function addBirthdays(user) {
                 // console.log ("Laden " + user);
 
-               $.getJSON("http://localhost:8080/jerseydemo/birthdays/user/" + user, function( data ) {
+               $.getJSON(getServerUrlWithUser() + user, function( data ) {
 
                 $.each( data.birthdays, function( key, val ) {
                     if (val.month == null || val.day == null) {
@@ -225,10 +318,25 @@
                 <span slot='button_text'>irene.troxler</span>
             </stzh-mk-button>
         </stzh-mk-tabinterface-panel>
-        <stzh-mk-tabinterface-panel title="CSV">
+
+        <stzh-mk-tabinterface-panel title="Upload">
             <span slot='tabSubTitle'>CSV Hochladen</span>
+
+            <h3>Für welchen Benutzer?</h3>
+            <stzh-mk-button  onclick="setUserTo('frank.loeliger');">
+                <span slot='button_text'>Frank</span>
+            </stzh-mk-button>  
+            <stzh-mk-button  onclick="setUserTo('frank.loeliger.csv');">
+                <span slot='button_text'>Frank CSV</span>
+            </stzh-mk-button>  
+            <stzh-mk-button  onclick="setUserTo('irene.troxler');">
+                <span slot='button_text'>Irène</span>
+            </stzh-mk-button>  
+            <p><div id='idUser'>fff</div></p>
+
+
             <h3>CSV Format prüfen</h3>
-            <form action="http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.test.csv/verifyformat" 
+            <form onSubmit="return setActionForUserWithAdditionalResource(this, '/verifyformat')"
                     method="post"
                     enctype="multipart/form-data"
                     content-type="charset=utf-8">
@@ -238,8 +346,8 @@
                 <input type="submit">
             </form>
             <h3>CSV Auswählen und hochladen</h3>
-            <form action="http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.csv" 
-                    method="post"
+            <form onSubmit="return setActionForUserWithAdditionalResource(this, '')" 
+                method="post"
                     enctype="multipart/form-data"
                     content-type="charset=utf-8">
                 <p>Ersetze die Geburtstagsliste von frank.loeliger.csv vollständig (Create/Replace)</p>
@@ -248,13 +356,24 @@
                 <input type="submit">
             </form>
         </stzh-mk-tabinterface-panel>
+
+        <stzh-mk-tabinterface-panel title="Einstellungen">
+            <span slot='tabSubTitle'>Server</span>
+            <stzh-mk-button  onclick="setServerUrlLocal();">
+                <span slot='button_text'>Lokaler Server</span>
+            </stzh-mk-button>  
+            <stzh-mk-button  onclick="setServerUrlTomcat();">
+                <span slot='button_text'>Tomcat Server</span>
+            </stzh-mk-button>  
+            <p><div id='idServerURL'>fff</div></p>
+        </stzh-mk-tabinterface-panel>
+
         <stzh-mk-tabinterface-panel title="Beta">
             <span slot='tabSubTitle'>Beta</span>
             <h2>Testen des Uploads</h2>
 
             <h3>Bitte korrekt formatierte Files hochladen</h3>
-
-            <form action="http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.test" 
+            <form onSubmit="return setActionForUserWithAdditionalResource(this, '')"
                     method="post"
                     enctype="multipart/form-data"
                     content-type="charset=utf-8">
@@ -264,7 +383,7 @@
                 <input type="submit">
             </form>
 
-            <form action="http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.test" 
+            <form onSubmit="return setActionForUserWithAdditionalResource(this, '')"
             method="post"
             enctype="multipart/form-data">
                 <p>Ergänze die Geburtstagsliste (Update)</p>
@@ -282,8 +401,11 @@
     </footer>
 
     <script>
-        var urlShow = "http://localhost:8080/jerseydemo/birthdays/user/";
-        var urlUpload = "http://localhost:8080/jerseydemo/birthdays/user/";
+        var urlShow = getServerUrlWithUser();
+        var urlUpload = getServerUrlWithUser();
+
+        initLocalStorage("0.2");
+        initUser("frank.loeliger.csv");
 
         prepareMonths();
         /*addUploadButton("Show Irène", urlShow + "irene.troxler");
@@ -294,6 +416,7 @@
         //addBirthdays("frank.loeliger");      
         addBirthdays("BirthdayList.readonly.unit.test");      
         addBirthdays("BirthdayList.readonly.2.unit.test");      
+
     </script>
 
     
