@@ -5,26 +5,20 @@
   respecitvely the very first element which needs a smalle/larger margin is added another margin
 */
 
-.mflo-dashboard {
-  border: 2px darkblue solid;
-  margin-block-start: 1em;
-  margin-block-end: 1em;
-  margin-inline-start: 0em;
-  margin-inline-end: 0em;
-  padding: 0.2em 0.2em 0.2em 0.2em;
-} 
-
-.mflo-dashboard-card {
-  border: 2px green solid;
-  margin-block-start: 0.2em;
+.mflo-birthday {
+  margin-block-start: 0.0em;
   margin-block-end: 0em;
-  margin-inline-start: 0.2em;
+  margin-inline-start: 0.4em;
   margin-inline-end: 0.2em;
-  padding: 0.2em 0.2em 0.2em 0.2em;
+  padding: 0.0em 0.0em 0.0em 0.0em;
+  border: 0px rgb(1, 31, 4) dotted;
 }
 
-.mflo-call-to-action {
-  border: 1px darkgray dotted;
-  background-color: darkgray;
-  
+.mflo-birthday-with-age {
+  margin-block-start: 0.0em;
+  margin-block-end: 0em;
+  margin-inline-start: 0.4em;
+  margin-inline-end: 0.2em;
+  padding: 0.0em 0.0em 0.0em 0.0em;
+  border: 0px rgb(1, 31, 4) dotted;
 }

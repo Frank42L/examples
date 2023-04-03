@@ -4,8 +4,8 @@
     <title>First-Steps (Frank42L)</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/style_core_elements.css">
-    <link rel="stylesheet" href="assets/css/style_mk.css">
-    <link rel="stylesheet" href="assets/css/rwrd_simulation.css">
+    <link rel="stylesheet" href="assets/css/style_mflo.css">
+    <link rel="stylesheet" href="assets/css/style_mflo_simulation.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
@@ -13,45 +13,45 @@
 
     <h1>MEIN KONTO / TESTS</h1>
 
-    <stzh-mk-dashboard title="Mein Konto Dashboard 1">
+    <mflo-dashboard title="Mein Konto Dashboard 1">
         <span slot="title">Mein Konto (1)</span>
         <span slot="menu1">Meine Services</span>
         <span slot="menu2">Alle Services</span> 
         <span slot="menu3">Mitteilungen</span> 
         <span slot="menu4">Einstellungen</span> 
-    </stzh-mk-dashboard>
+    </mflo-dashboard>
 
-    <stzh-mk-dashboard>
+    <mflo-dashboard>
         <span slot="title">Mein Konto (2)</span>
         <span slot="menu1">Meine Services</span>
         <span slot="menu2">Alle Services</span> 
         <span slot="menu3">Mitteilungen</span> 
         <span slot="menu4">Einstellungen</span> 
 
-        <stzh-mk-dashboard-card>
+        <mflo-dashboard-card>
             <span slot="title">News</span>
             <span slot="subtitle">Alle News</span> 
-            <stzh-mk-call-to-action href="https://www.stadt-zuerich.ch/news">
+            <mflo-call-to-action href="https://www.stadt-zuerich.ch/news">
                 Zeige Neuigkeiten
-            </stzh-mk-call-to-action>
-        </stzh-mk-dashboard-card>
-        <stzh-mk-dashboard-card>
+            </mflo-call-to-action>
+        </mflo-dashboard-card>
+        <mflo-dashboard-card>
             <span slot="title">Meine Schule</span>
             <span slot="subtitle">Riedhof-Pünten</span> 
             <span slot="description">Direktlink zur Schule...</span> 
-            <stzh-mk-call-to-action href="https://www.stadt-zuerich.ch">
+            <mflo-call-to-action href="https://www.stadt-zuerich.ch">
                 Zeige Schule
-            </stzh-mk-call-to-action>
-        </stzh-mk-dashboard-card>
-        <stzh-mk-dashboard-card>
+            </mflo-call-to-action>
+        </mflo-dashboard-card>
+        <mflo-dashboard-card>
             <span slot="title">Entsorgungskalender</span>
             <span slot="subtitle">Imbisbühlstrasse 67</span> 
             <span slot="description">Aktuell nicht verfügbar</span> 
-        </stzh-mk-dashboard-card>
-    </stzh-mk-dashboard>
+        </mflo-dashboard-card>
+    </mflo-dashboard>
 
-    <script src="skzMkDashboard.js" type="module"></script>
-    <script src="skzMkDashboardCard.js" type="module"></script>
-    <script src="skzMkCallToAction.js" type="module"></script>
+    <script src="mfloDashboard.js" type="module"></script>
+    <script src="mfloDashboardCard.js" type="module"></script>
+    <script src="mfloCallToAction.js" type="module"></script>
 </body>
 </html>

@@ -4,10 +4,10 @@
     <title>First-Steps (Frank42L)</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/style_core_elements.css">
-    <link rel="stylesheet" href="assets/css/style_mk.css">
-    <link rel="stylesheet" href="assets/css/style_mk_birthday.css">
-    <link rel="stylesheet" href="assets/css/style_mk_tabinterface.css">
-    <link rel="stylesheet" href="assets/css/rwrd_simulation.css">
+    <link rel="stylesheet" href="assets/css/style_mflo.css">
+    <link rel="stylesheet" href="assets/css/style_mflo_birthday.css">
+    <link rel="stylesheet" href="assets/css/style_mflo_tabinterface.css">
+    <link rel="stylesheet" href="assets/css/style_mflo_simulation.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
@@ -130,12 +130,12 @@
             $.getJSON(getServerUrlWithUser() + user + "/config", function( data ) {
             // $.getJSON( "../../../Geburtstagsliste/data_clientside/frank.loeliger.config.json", function( data ) {
                 $.each( data.months, function( key, val ) {
-                    item_months.push( "<stzh-mk-birthday-month id='month_" + val.cnt + "'><span slot='month'>" 
+                    item_months.push( "<mflo-birthday-month id='month_" + val.cnt + "'><span slot='month'>" 
                         + val.month + "</span>" 
-                        + "</stzh-mk-birthday-month>" );
+                        + "</mflo-birthday-month>" );
                 });
 
-                $( "<stzh-mk-birthday-board/>", {
+                $( "<mflo-birthday-board/>", {
                     "title": "Geburtstage",
                     html: "<span slot='title'>Geburtstagsliste</span>"+item_months.join( "" )
                 }).appendTo( "body" );
@@ -143,7 +143,7 @@
         }
 
         function resetMonths() {
-            var childElements = document.getElementsByTagName("stzh-mk-birthday-board");
+            var childElements = document.getElementsByTagName("mflo-birthday-board");
             /* console.log("childElement = " + childElements);
             console.log("      length = " + childElements.length); */
             if (childElements && childElements.length > 0){
@@ -168,7 +168,7 @@
             {
                 // search first day which is before the new day
                 // console.log("month_"+ month + "_" + day +" does not exist");
-                var children = elemMonth.find("stzh-mk-birthday-day");
+                var children = elemMonth.find("mflo-birthday-day");
                 if (children && children.length > 0) {
                     // console.log("month has already " + children.length + " days");
                     children.each( function(index, child) {
@@ -183,13 +183,13 @@
                 }
                 // add now
                 if (elemDayAfter != null) {
-                    $( "<stzh-mk-birthday-day id='month_"+ month + "_" + day+"'> "
+                    $( "<mflo-birthday-day id='month_"+ month + "_" + day+"'> "
                         + "<span slot='day'>" + day + "</span>"
-                        + "</stzh-mk-birthday-day>").insertBefore(idOfDayAfter);
+                        + "</mflo-birthday-day>").insertBefore(idOfDayAfter);
                 } else {
-                    $( "<stzh-mk-birthday-day id='month_"+ month + "_" + day+"'> "
+                    $( "<mflo-birthday-day id='month_"+ month + "_" + day+"'> "
                         + "<span slot='day'>" + day + "</span>"
-                        + "</stzh-mk-birthday-day>"
+                        + "</mflo-birthday-day>"
                     ).appendTo( $("#month_" + month) );
                 }
             }
@@ -213,7 +213,7 @@
                     $( "<div/>", {
                             "class": "my-new-list",
                             html: 
-                            "  <stzh-mk-birthday-with-age id='person_hash_"+ val.hash + "'> "
+                            "  <mflo-birthday-with-age id='person_hash_"+ val.hash + "'> "
                                 + "  <span slot='firstname'>" + val.firstname + "</span>"
                                 + "  <span slot='surname'>" + val.surname + "</span>"
                                 + "  <span slot='day'>" + val.day + "</span> "
@@ -221,19 +221,19 @@
                                 + "  <span slot='year'>" + val.year + "</span> "
                                 + "  <span slot='age'>" + age + "</span> "
                                 + "  <span slot='hash'>" + val.hash + "</span> "
-                            + "  </stzh-mk-birthday>"
+                            + "  </mflo-birthday>"
                         }).appendTo( $("#month_" + val.month + "_" + val.day) );
                 } else {
                     $( "<div/>", {
                             "class": "my-new-list",
                             html: 
-                            "  <stzh-mk-birthday id='person_hash_"+ val.hash + "'> "
+                            "  <mflo-birthday id='person_hash_"+ val.hash + "'> "
                                 + "  <span slot='firstname'>" + val.firstname + "</span>"
                                 + "  <span slot='surname'>" + val.surname + "</span>"
                                 + "  <span slot='day'>" + val.day + "</span> "
                                 + "  <span slot='month'>" + val.month + "</span>" 
                                 + "  <span slot='hash'>" + val.hash + "</span> "
-                            + "  </stzh-mk-birthday>"
+                            + "  </mflo-birthday>"
                         }).appendTo( $("#month_" + val.month + "_" + val.day) );
                 }
                 
@@ -266,11 +266,11 @@
         } 
 
         function addUploadButton(buttontext, url) {
-            $( "<stzh-mk-call-to-action "
+            $( "<mflo-call-to-action "
                 + "destination='" + url + "'" 
                 + " buttontext='" + buttontext + "'"
                 + ">"
-                + "</stzh-mk-call-to-action>"
+                + "</mflo-call-to-action>"
             ).appendTo( "body" );
         }
 
@@ -278,60 +278,60 @@
 
     <h1>Geburtstagsliste</h1>
 
-    <stzh-mk-tabinterface>
-        <stzh-mk-tabinterface-panel title="Home">
+    <mflo-tabinterface>
+        <mflo-tabinterface-panel title="Home">
             <span slot='tabSubTitle'>Home</span>
-            <stzh-mk-button  onclick="resetMonths();">
+            <mflo-button  onclick="resetMonths();">
                 <span slot='button_text'>Liste leeren</span>
-            </stzh-mk-button>  
-        </stzh-mk-tabinterface-panel>
-        <stzh-mk-tabinterface-panel title="Laden">
+            </mflo-button>  
+        </mflo-tabinterface-panel>
+        <mflo-tabinterface-panel title="Laden">
             <span slot='tabSubTitle'>Geburtstage Laden</span>
-            <stzh-mk-button  onclick="resetMonths();">
+            <mflo-button  onclick="resetMonths();">
                 <span slot='button_text'>Clear</span>
-            </stzh-mk-button>  
-            <stzh-mk-button  onclick="addBirthdays('BirthdayList.readonly.unit.test');">
+            </mflo-button>  
+            <mflo-button  onclick="addBirthdays('BirthdayList.readonly.unit.test');">
                 <span slot='button_text'>Readonly</span>
-            </stzh-mk-button>
-            <stzh-mk-button  onclick="addBirthdays('BirthdayList.readonly.2.unit.test');">
+            </mflo-button>
+            <mflo-button  onclick="addBirthdays('BirthdayList.readonly.2.unit.test');">
                 <span slot='button_text'>Readonly 2</span>
-            </stzh-mk-button>
-            <stzh-mk-button  onclick="addBirthdays('BirthdayList.mergetest.1.unit.test');">
+            </mflo-button>
+            <mflo-button  onclick="addBirthdays('BirthdayList.mergetest.1.unit.test');">
                 <span slot='button_text'>Merge 1</span>
-            </stzh-mk-button>
-            <stzh-mk-button  onclick="addBirthdays('BirthdayList.mergetest.2.unit.test');">
+            </mflo-button>
+            <mflo-button  onclick="addBirthdays('BirthdayList.mergetest.2.unit.test');">
                 <span slot='button_text'>Merge 2</span>
-            </stzh-mk-button>
-            <stzh-mk-button  onclick="addBirthdays('BirthdayList.mergetest.3.unit.test');">
+            </mflo-button>
+            <mflo-button  onclick="addBirthdays('BirthdayList.mergetest.3.unit.test');">
                 <span slot='button_text'>Merge 3</span>
-            </stzh-mk-button>           
-            <stzh-mk-button  onclick="addBirthdays('BirthdayList.unit.test');">
+            </mflo-button>           
+            <mflo-button  onclick="addBirthdays('BirthdayList.unit.test');">
                 <span slot='button_text'>All</span>
-            </stzh-mk-button>  
-            <stzh-mk-button  onclick="addBirthdays('frank.loeliger.csv');">
+            </mflo-button>  
+            <mflo-button  onclick="addBirthdays('frank.loeliger.csv');">
                 <span slot='button_text'>frank.loeliger.csv</span>
-            </stzh-mk-button>
-            <stzh-mk-button  onclick="addBirthdays('frank.loeliger');">
+            </mflo-button>
+            <mflo-button  onclick="addBirthdays('frank.loeliger');">
                 <span slot='button_text'>frank.loeliger</span>
-            </stzh-mk-button>
-            <stzh-mk-button  onclick="addBirthdays('irene.troxler');">
+            </mflo-button>
+            <mflo-button  onclick="addBirthdays('irene.troxler');">
                 <span slot='button_text'>irene.troxler</span>
-            </stzh-mk-button>
-        </stzh-mk-tabinterface-panel>
+            </mflo-button>
+        </mflo-tabinterface-panel>
 
-        <stzh-mk-tabinterface-panel title="Upload">
+        <mflo-tabinterface-panel title="Upload">
             <span slot='tabSubTitle'>CSV Hochladen</span>
 
             <h3>Für welchen Benutzer?</h3>
-            <stzh-mk-button  onclick="setUserTo('frank.loeliger');">
+            <mflo-button  onclick="setUserTo('frank.loeliger');">
                 <span slot='button_text'>Frank</span>
-            </stzh-mk-button>  
-            <stzh-mk-button  onclick="setUserTo('frank.loeliger.csv');">
+            </mflo-button>  
+            <mflo-button  onclick="setUserTo('frank.loeliger.csv');">
                 <span slot='button_text'>Frank CSV</span>
-            </stzh-mk-button>  
-            <stzh-mk-button  onclick="setUserTo('irene.troxler');">
+            </mflo-button>  
+            <mflo-button  onclick="setUserTo('irene.troxler');">
                 <span slot='button_text'>Irène</span>
-            </stzh-mk-button>  
+            </mflo-button>  
             <p><div id='idUser'>fff</div></p>
 
 
@@ -355,20 +355,20 @@
                 <input type="file" id="upload_file" name="file" accept="application/csv">
                 <input type="submit">
             </form>
-        </stzh-mk-tabinterface-panel>
+        </mflo-tabinterface-panel>
 
-        <stzh-mk-tabinterface-panel title="Einstellungen">
+        <mflo-tabinterface-panel title="Einstellungen">
             <span slot='tabSubTitle'>Server</span>
-            <stzh-mk-button  onclick="setServerUrlLocal();">
+            <mflo-button  onclick="setServerUrlLocal();">
                 <span slot='button_text'>Lokaler Server</span>
-            </stzh-mk-button>  
-            <stzh-mk-button  onclick="setServerUrlTomcat();">
+            </mflo-button>  
+            <mflo-button  onclick="setServerUrlTomcat();">
                 <span slot='button_text'>Tomcat Server</span>
-            </stzh-mk-button>  
+            </mflo-button>  
             <p><div id='idServerURL'>fff</div></p>
-        </stzh-mk-tabinterface-panel>
+        </mflo-tabinterface-panel>
 
-        <stzh-mk-tabinterface-panel title="Beta">
+        <mflo-tabinterface-panel title="Beta">
             <span slot='tabSubTitle'>Beta</span>
             <h2>Testen des Uploads</h2>
 
@@ -393,8 +393,8 @@
                 <input type="submit">
             </form>
 
-        </stzh-mk-tabinterface-panel>
-    </stzh-mk-tabinterface>
+        </mflo-tabinterface-panel>
+    </mflo-tabinterface>
 
     <footer class="print">
         <div class="page-number"></div>
@@ -421,16 +421,16 @@
 
     
 
-    <script src="skzMkDashboard.js" type="module"></script>
-    <script src="skzMkDashboardCard.js" type="module"></script>
-    <script src="skzMkCallToAction.js" type="module"></script>
-    <script src="skzMkButton.js" type="module"></script>
-    <script src="skzMkBirthdayBoard.js" type="module"></script>
-    <script src="skzMkBirthday.js" type="module"></script>
-    <script src="skzMkBirthdayWithAge.js" type="module"></script>
-    <script src="skzMkBirthdayMonth.js" type="module"></script>
-    <script src="skzMkBirthdayDay.js" type="module"></script>
-    <script src="skzMkTabInterface.js" type="module"></script>
-    <script src="skzMkTabInterfacePanel.js" type="module"></script>
+    <script src="mfloDashboard.js" type="module"></script>
+    <script src="mfloDashboardCard.js" type="module"></script>
+    <script src="mfloCallToAction.js" type="module"></script>
+    <script src="mfloButton.js" type="module"></script>
+    <script src="mfloBirthdayBoard.js" type="module"></script>
+    <script src="mfloBirthday.js" type="module"></script>
+    <script src="mfloBirthdayWithAge.js" type="module"></script>
+    <script src="mfloBirthdayMonth.js" type="module"></script>
+    <script src="mfloBirthdayDay.js" type="module"></script>
+    <script src="mfloTabInterface.js" type="module"></script>
+    <script src="mfloTabInterfacePanel.js" type="module"></script>
 </body>
 </html>
