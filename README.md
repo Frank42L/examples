@@ -71,7 +71,7 @@ Eigene Beispiele auf Github
 - vierter Schritt - Gehversuch mit Pull Request (secondpull)
 
 Git Start:
-- Starte Gitbasch
+- Starte Gitbash
 - Startverzeichnis: /G/Privat/Frank/PRIVAT/Fingerübungen/airhack_adam_bien/Frank42L-examples
 - git diff 
 
