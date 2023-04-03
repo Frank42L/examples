@@ -15,3 +15,13 @@
     padding: 0.2em 1em 0.2em 0.2em;
     background-color: whitesmoke;
   } 
+
+  /* print styles */
+
+@media print {
+  .stzh-mk-birthday-board {
+    background-color: white;
+    border: 0px black solid;
+    column-count: 3;
+  }
+}

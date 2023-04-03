@@ -82,3 +82,55 @@ button:hover {
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.24), 
               0 8px 20px 0 rgba(0,0,0,0.19);
 }
+
+/* Screen  styles */
+@media screen {
+  footer {
+    display: none;
+  }
+}
+
+
+/* print styles */
+@media print {
+  body {
+    color: black;
+  }
+
+  h1 {
+    display: none;
+  }
+
+  @page {
+    color: black;
+    size : A4 landscape;
+    margin-top: 1.5cm;
+    margin-left: 1.5cm;
+    margin-right: 1.5cm;
+    margin-bottom: 1.5cm;
+    counter-reset: pageNumber 10;
+    /* folgendes funktion Stand Nov 2022 noch in keinem Broser, leider */
+    /* @top-left {
+      content: " Seite " counter(page);
+    };
+    @top-right {
+      content: "hallo";
+    };
+    @top-center {
+      content: "test";
+    }*/
+  }
+
+  
+  footer {
+    position: fixed;
+    bottom: 0cm;
+  }
+  
+  .page-number::before {
+    counter-increment: pageNumber;
+    /* content: "Seite XXXXXX" counter(pageNumber);*/
+  }
+
+}
+

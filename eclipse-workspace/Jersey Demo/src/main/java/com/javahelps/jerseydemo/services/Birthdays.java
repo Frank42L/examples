@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.charset.Charset;
 import java.util.Iterator;
 
 import javax.ws.rs.Consumes;
@@ -31,7 +30,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 @Path("/birthdays/user/{user}")
 public class Birthdays {
-	private static boolean VERBOSE = false;
+	private static boolean VERBOSE = true;
 	private static void print(String s) {
 		if (VERBOSE) { 
 			System.out.print(s);

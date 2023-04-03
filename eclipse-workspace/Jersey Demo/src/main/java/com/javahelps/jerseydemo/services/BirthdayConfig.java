@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class BirthdayConfig {
 	private static final String DEFAULT_CONFIG_NAME = "default";
 	private static final String SERVER_SIDE_DATA_DIR = "G:\\Privat\\Frank\\PRIVAT\\Fingerübungen\\Geburtstagsliste\\data_serverside\\";
+	private static final String SERVER_SIDE_DATA_DIR2 = "/data_serverside/";
 	private static boolean VERBOSE = true;
 	private static void print(String s) {
 		if (VERBOSE) { 
@@ -61,7 +62,7 @@ public class BirthdayConfig {
 	static private BirthdayConfig readConfigFromFile(final String user) {
 	    ObjectMapper mapper = new ObjectMapper();
 	    BirthdayConfig config = new BirthdayConfig();
-		String pathname = SERVER_SIDE_DATA_DIR + user + ".config.json";
+		String pathname = getServerSideDataDir() + user + ".config.json";
 		println("Configuration for Username = " + user);
 		File f = Paths.get(pathname).toFile();
 	    try {
@@ -80,7 +81,7 @@ public class BirthdayConfig {
 	static public void prepareDefaultConfigFile() {  
 		InputStream is;
 		String resourceFileName = DEFAULT_CONFIG_NAME + ".config.json";
-		String pathname = SERVER_SIDE_DATA_DIR + resourceFileName;
+		String pathname = getServerSideDataDir() + resourceFileName;
 		Path path = Paths.get(pathname);
 		File f = Paths.get(pathname).toFile();
 	    try {
@@ -128,6 +129,25 @@ public class BirthdayConfig {
 	    	if (bis != null) { bis.close(); }
 	    }
 	    return config;
+	}
+	
+	static private boolean dirExists(String pathname) {
+		boolean exists = false;
+		File f = Paths.get(pathname).toFile();
+		exists = (f.exists() && f.isDirectory());
+		println("\t try server-side-directory Version 3.0  " + pathname + " : " + exists);
+		// System.err.println("\t try server-side-directory " + pathname + " : " + exists);
+    	return exists;
+	}
+	
+	static public String getServerSideDataDir() {
+		if (dirExists(SERVER_SIDE_DATA_DIR2)) {
+			return SERVER_SIDE_DATA_DIR2;
+		} else if (dirExists(SERVER_SIDE_DATA_DIR)) {
+			return SERVER_SIDE_DATA_DIR;
+		} else {
+			return "\\server-side-dir-does-not-exist";
+		}
 	}
 
 }

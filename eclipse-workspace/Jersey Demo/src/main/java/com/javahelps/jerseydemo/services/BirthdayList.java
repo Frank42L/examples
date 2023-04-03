@@ -18,7 +18,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class BirthdayList {
-	private static final String SERVER_SIDE_DATA_DIR = "G:\\Privat\\Frank\\PRIVAT\\Fingerübungen\\Geburtstagsliste\\data_serverside\\";
 	private static boolean VERBOSE = false;
 	private static void print(String s) {
 		if (VERBOSE) { 
@@ -104,7 +103,7 @@ public class BirthdayList {
 	static public BirthdayList readBirthdaysFromFile2Json( final String user ) {
 	    ObjectMapper mapper = new ObjectMapper();
 	    BirthdayList bl = new BirthdayList();
-		String pathname = SERVER_SIDE_DATA_DIR + user + ".json";
+		String pathname = BirthdayConfig.getServerSideDataDir() + user + ".json";
 		print("Username = " + user);
 		File f = Paths.get(pathname).toFile();
 	    try {
@@ -119,7 +118,7 @@ public class BirthdayList {
 	} 
 	
 	static public File getFileAndCreateIfNotExists( final String user ) throws IOException {
-		String pathname = SERVER_SIDE_DATA_DIR + user + ".json";
+		String pathname = BirthdayConfig.getServerSideDataDir() + user + ".json";
 		println("Username = " + user);
 		File f = Paths.get(pathname).toFile();
 			if (f.createNewFile()) {

@@ -79,3 +79,20 @@
   }
   
 }
+
+/* print styles */
+
+@media print {
+  button {
+    display: none;
+  }
+
+  [role="tabpanel"] {
+    display: none !important;
+  }
+
+  [role="tablist"] {
+    display: none;
+  }
+}
+
