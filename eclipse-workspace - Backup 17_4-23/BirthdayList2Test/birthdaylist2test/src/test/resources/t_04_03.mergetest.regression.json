@@ -1,8 +1,0 @@
-{
-    "birthdays":[
-        {"firstname":"Ralph", "surname":"Peterhans",    "day":"6",  "month":"1",  "year": ""},
-        {"firstname":"Irène", "surname":"Muster",   "day":"13", "month":"3", "year": "1998"},
-        {"firstname":"Frank", "surname":"Muster",   "day":"5",  "month":"2",  "year": "1998"},
-        {"firstname":"Petra", "surname":"Muster",   "day":"3",  "month":"2",  "year": "1998"}
-    ]
-}
