@@ -1,0 +1,30 @@
+/* Guidelines 
+- styles which relate to structural elements (content) like the font color should be added to the structural element
+- styles which relate to positioning, borders etc. shoul be added to the related class
+- spacing which are needed beteen two elements are added consequently at the top margin of the second element. 
+  respecitvely the very first element which needs a smalle/larger margin is added another margin
+*/
+
+.mflo-dashboard {
+  border: 2px darkblue solid;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0em;
+  margin-inline-end: 0em;
+  padding: 0.2em 0.2em 0.2em 0.2em;
+} 
+
+.mflo-dashboard-card {
+  border: 2px green solid;
+  margin-block-start: 0.2em;
+  margin-block-end: 0em;
+  margin-inline-start: 0.2em;
+  margin-inline-end: 0.2em;
+  padding: 0.2em 0.2em 0.2em 0.2em;
+}
+
+.mflo-call-to-action {
+  border: 1px darkgray dotted;
+  background-color: darkgray;
+  
+}

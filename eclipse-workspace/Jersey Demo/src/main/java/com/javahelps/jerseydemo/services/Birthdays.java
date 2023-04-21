@@ -88,7 +88,7 @@ public class Birthdays {
     @GET
     @Path("/config")
     @Produces("text/plain")
-    public Response getConfigrationForPerson(@PathParam("user") String user) {
+    public Response getConfigurationForPerson(@PathParam("user") String user) {
     	String json;
     	json = BirthdayConfig.readConfigFromFile2Json(user).toJson();
     	return Response.ok() // 200

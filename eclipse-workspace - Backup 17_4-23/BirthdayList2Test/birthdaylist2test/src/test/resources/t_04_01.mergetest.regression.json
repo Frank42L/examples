@@ -1,0 +1,12 @@
+{
+    "birthdays":[
+        {"firstname":"Christoph", "surname":"Muster",    "day":"7",  "month":"1",  "year": "1977"},
+        {"firstname":"Urban", "surname":"Muster",        "day":"11", "month":"1",  "year": "1978"},
+        {"firstname":"Ralph", "surname":"Peterhans",     "day":"6",  "month":"1",  "year": ""},
+        {"firstname":"Frank", "surname":"Muster",        "day":"3",  "month":"2",  "year": "1998"},
+        {"firstname":"Irène", "surname":"Muster",   "day":"13", "month":"3", "year": "1998"},
+        {"firstname":"Irène", "surname":"Muster Müller", "day":"13", "month":"3",  "year": "1998"},
+        {"firstname":"Mario", "surname":"Muster",        "day":"3",  "month":"4",  "year": "2021"},
+        {"firstname":"Alessia", "surname":"Muster",      "day":"3",  "month":"1",  "year": "2022"}
+    ]
+}

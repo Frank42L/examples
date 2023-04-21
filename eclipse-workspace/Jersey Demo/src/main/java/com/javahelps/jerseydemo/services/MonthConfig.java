@@ -1,27 +1,6 @@
 package com.javahelps.jerseydemo.services;
 
-import java.io.File;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.TreeSet;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 public class MonthConfig {
-	private static boolean VERBOSE = true;
-	private static void print(String s) {
-		if (VERBOSE) { 
-			System.out.print(s);
-		}
-	}
-	private static void println(String s) {
-		if (VERBOSE) { 
-			System.out.println(s);
-		}
-	}	
-	
 	private String cnt;
 	private String month;
 	private String monthShort;
@@ -60,4 +39,7 @@ public class MonthConfig {
 		this.monthNumber = monthNumber;
 	}
 
+	public String toString() {
+		return cnt + " " + monthNumber + " " + month + " " + monthShort;
+	}
 }

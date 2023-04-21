@@ -22,6 +22,7 @@ import org.junit.jupiter.api.DisplayName;
 import com.javahelps.jerseydemo.services.BirthDayPerson;
 import com.javahelps.jerseydemo.services.BirthdayConfig;
 import com.javahelps.jerseydemo.services.BirthdayList;
+import com.javahelps.jerseydemo.services.BirthdayVersionInfo;
 import com.javahelps.jerseydemo.services.MonthConfig;
 
 
@@ -32,18 +33,27 @@ import com.javahelps.jerseydemo.services.MonthConfig;
 @DisplayName("Unit Tests of BirthdayList REST API")
 public class BirthdayListTestBase 
 {
+//	private static final String HTTP_LOCALHOST_8080_JERSEYDEMO_BIRTHDAYS = "http://tomcat:8080/BirthdayList/birthdays";
 	private static final String HTTP_LOCALHOST_8080_JERSEYDEMO_BIRTHDAYS = "http://localhost:8080/jerseydemo/birthdays";
 	protected static boolean VERBOSE = false;
+
+	protected String getUri() {
+    	return HTTP_LOCALHOST_8080_JERSEYDEMO_BIRTHDAYS;
+    }
 
 	protected String getUriWithUser(String user, String subPath) {
     	if (user.isBlank()) {
     		return getUriAllUsers(subPath);
     	}
-    	return HTTP_LOCALHOST_8080_JERSEYDEMO_BIRTHDAYS + "/user/" + user + subPath;
+    	return getUri() + "/user/" + user + subPath;
     }
     
 	protected String getUriAllUsers(String subPath) {
-    	return HTTP_LOCALHOST_8080_JERSEYDEMO_BIRTHDAYS +  "/users"+ subPath;
+    	return getUri() +  "/users"+ subPath;
+    }
+
+	protected String getUriVersion() {
+    	return getUri() +  "/version";
     }
 
 	protected void assertResponse(CloseableHttpResponse response, String fullResponseContent) {
@@ -93,8 +103,28 @@ public class BirthdayListTestBase
     	assertTrue(config != null);
     	return config;
     }
+	
 
-    private BirthdayList restCallPostFile(String restUri, String resourceFileName, String restCallMethod, String comment) {
+	protected BirthdayVersionInfo restCallGetVersionInfo(String restUri, String comment) {
+		BirthdayVersionInfo versionInfo = null;
+    	
+    	try {
+			HttpGet httpGet = new HttpGet(restUri);
+			CloseableHttpClient httpclient = HttpClients.createDefault();
+			CloseableHttpResponse response = httpclient.execute(httpGet);
+			String str = null;
+			str = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+			assertResponse(response, str);
+			InputStream isResponse = new ByteArrayInputStream(str.getBytes(StandardCharsets.UTF_8));
+			versionInfo = BirthdayVersionInfo.getBirthdayVersionInfoFromStream(isResponse, comment);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+    	assertTrue(versionInfo != null);
+    	return versionInfo;
+    }
+
+	private BirthdayList restCallPostFile(String restUri, String resourceFileName, String restCallMethod, String comment) {
 
     	BirthdayList bl = null;
     	InputStream is = getClass().getResourceAsStream("/" + resourceFileName);
@@ -175,7 +205,14 @@ public class BirthdayListTestBase
 
     }
     
-    protected void printConfig(String strTitle, BirthdayConfig config, boolean info) {
+    protected void printInfo(String str, boolean info) {
+    	
+		if (VERBOSE || info) {
+			System.out.println("\t" + str);
+		}
+    }
+
+	protected void printConfig(String strTitle, BirthdayConfig config, boolean info) {
     	
 		if (VERBOSE || info) {
 			Iterator<MonthConfig> iter;
@@ -193,7 +230,7 @@ public class BirthdayListTestBase
 		} 		
 
     }
-    
+
     protected void printBirthdays(String strTitle, BirthdayList bl) {
     	printBirthdays(strTitle, bl, false);
     }

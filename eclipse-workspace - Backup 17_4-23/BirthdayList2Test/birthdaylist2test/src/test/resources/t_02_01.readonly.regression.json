@@ -1,0 +1,19 @@
+{
+    "birthdays":[
+        {"firstname":"Peter", "surname":"Muster",     "day":"2",  "month":"5",  "year": "1966"},
+        {"firstname":"Peter", "surname":"Muster",     "day":"3",  "month":"5",  "year": "1966"},
+        {"firstname":"Peter", "surname":"Muster",     "day":"3",  "month":"5",  "year": "1966"},
+        {"firstname":"Anja",  "surname":"Meier",      "day":"13", "month":"10", "year": "1966"},
+        {"firstname":"Berta", "surname":"Meier",      "day":"1",  "month":"1",  "year": "2001"},
+        {"firstname":"Paul",  "surname":"Meier",      "day":"1",  "month":"1",  "year": "1967"},
+        {"firstname":"Paul",  "surname":"Meier",      "day":"1",  "month":"1",  "year": "1967"},
+        {"firstname":"Paul",  "surname":"Meier",      "day":"1",  "month":"",   "year": "1967"},
+        {"firstname":"Paul",  "surname":"Meier",      "day":"1",  "month":"",   "year": "1967"},
+        {"firstname":"Paul",  "surname":"Meier",      "day":"1",  "month":"",   "year": "1967"},
+        {"firstname":"Paul",  "surname":"Meier",      "day":"1",  "month":"1",  "year": ""},
+        {"firstname":"Paul",  "surname":"Meier",      "day":"1",  "month":"1",  "year": ""},
+        {"firstname":"Paul",  "surname":"Meier",      "day":"1",  "month":"1",  "year": ""},
+        {"firstname":"Paula",  "surname":"Meier",     "day":"1",  "month":"1",  "year": "1967"},
+        {"firstname":"Paula",  "surname":"Meier",     "day":"",   "month":"",   "year": ""}
+    ]
+}

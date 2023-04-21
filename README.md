@@ -111,14 +111,13 @@ Aktuell empfohlener Ablauf:
 - git push origin --delete XXXX
 
 
-UM MIT BRANCHES Arbeiten zu können:
+UM MIT BRANCHES Arbeiten zu können :
 - git branch new-feature (falls branch erwünscht)
 - git checkout new-feature master
 - git commit -m "First work on new-feature done, will work tomorrow on next part of feature"
 - git add <file>
 - git commit -m "finished work on feature"
-- ...
-- git checkout master (Status bevor wir mit feature begonnen haben)
+- ...it checkout master (Status bevor wir mit feature begonnen haben)
 - git merge new-feature (merged den  master mit dem aktuellen Branch "new-feature" und erzeugt einen merge-commit)
 - git branch -d new-feature
 
