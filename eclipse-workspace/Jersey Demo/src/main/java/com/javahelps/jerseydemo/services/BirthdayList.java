@@ -100,21 +100,26 @@ public class BirthdayList {
 	    return bl;
 	}
 
-	static public BirthdayList readBirthdaysFromFile2Json( final String user ) {
+	static public BirthdayList readBirthdaysFromFile2Json( File f, final String user ) {
 	    ObjectMapper mapper = new ObjectMapper();
 	    BirthdayList bl = new BirthdayList();
-		String pathname = BirthdayConfig.getServerSideDataDir() + user + ".json";
 		print("Username = " + user);
-		File f = Paths.get(pathname).toFile();
 	    try {
 	    	bl = mapper.readValue(f, BirthdayList.class);
-			println('\t' + "Einträge = " + bl.getBirthdays().size() + '\t' + "Filename = " + pathname);
+			println('\t' + "Einträge = " + bl.getBirthdays().size() + '\t' + "Filename = " + f.getAbsolutePath());
 	    } catch (JsonProcessingException e) {
 		       e.printStackTrace();
 		    } catch (Exception ex) {
 			    ex.printStackTrace();
 		    }
 		return bl;
+	} 
+	
+
+	static public BirthdayList readBirthdaysFromFile2Json( final String user ) {
+		String pathname = BirthdayConfig.getServerSideDataDir() + user + ".json";
+		File f = Paths.get(pathname).toFile();
+		return readBirthdaysFromFile2Json(f, user);
 	} 
 	
 	static public File getFileAndCreateIfNotExists( final String user ) throws IOException {

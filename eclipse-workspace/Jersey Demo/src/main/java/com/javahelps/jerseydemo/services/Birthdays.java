@@ -31,21 +31,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 @Path("/birthdays/user/{user}")
 public class Birthdays {
 	private static boolean VERBOSE = true;
-	private static void print(String s) {
-		if (VERBOSE) { 
-			System.out.print(s);
-		}
-	}
-	private static void println(String s) {
-		if (VERBOSE) { 
-			System.out.println(s);
-		}
-	}
-	private static void println(String s, boolean info) {
-		if (VERBOSE || info) { 
-			System.out.println(s);
-		}
-	}
+	private static boolean INFO = true;
 	
     static final Character SEMICOLON = Character.valueOf(';');
 
@@ -118,7 +104,7 @@ public class Birthdays {
     	String json;
     	BirthdayList blAll;
 
-    	println("Search within (user = " + user + ") for : " + firstname + " " + surname + " " + day + "." + month + "." + year);
+    	UtilVerbose.println(VERBOSE, "Search within (user = " + user + ") for : " + firstname + " " + surname + " " + day + "." + month + "." + year);
 
     	blAll = BirthdayList.readBirthdaysFromFile2Json(user);
     	json = blAll.filterPerson(
@@ -147,8 +133,8 @@ public class Birthdays {
     	BirthdayList blUpdated;
     	BirthDayPerson p;
 
-    	println("Update (user = " + user + ") for : " + firstname + " " + surname + " " + day + "." + month + "." + year);
-    	println("\twith " + updateDay + "." + updateMonth + "." + updateYear);
+    	UtilVerbose.println(VERBOSE, "Update (user = " + user + ") for : " + firstname + " " + surname + " " + day + "." + month + "." + year);
+    	UtilVerbose.println(VERBOSE, "\twith " + updateDay + "." + updateMonth + "." + updateYear);
 
     	// Search person(s)
     	blAll = BirthdayList.readBirthdaysFromFile2Json(user);
@@ -162,7 +148,7 @@ public class Birthdays {
     	// Remove the old persons  
     	blAll.remove(blUpdated);
     	
-    	// Update birthdate now
+    	// Update birthday now
     	Iterator<BirthDayPerson> iter;
     	iter = blUpdated.getBirthdays().iterator();
     	while (iter.hasNext()) {
@@ -214,19 +200,19 @@ public class Birthdays {
     		@FormDataParam("file") InputStream uploadedInputStream,
     		@FormDataParam("file") FormDataContentDisposition fileDetail) {
 		if (restMethod != null) {
-	    	println("Routing POST/PUT/PATCH/DELETE if coming from normal HTML Pages which only support GET and POST");    	
-	    	print("_rest_method = " + restMethod);    	
+	    	UtilVerbose.println(VERBOSE, "Routing POST/PUT/PATCH/DELETE if coming from normal HTML Pages which only support GET and POST");    	
+	    	UtilVerbose.print(VERBOSE, "_rest_method = " + restMethod);    	
 			if (restMethod.compareToIgnoreCase("patch") == 0) {
-		    	println(" routed to : mergeBirthdayList");    	
+		    	UtilVerbose.println(VERBOSE, " routed to : mergeBirthdayList");    	
 				return mergeBirthdayList(user, uploadedInputStream, fileDetail);
 			} else if (restMethod.compareToIgnoreCase("put") == 0) {
-		    	println(" not supported yet");    	
+		    	UtilVerbose.println(VERBOSE, " not supported yet");    	
 			} else if (restMethod.compareToIgnoreCase("delete") == 0) {
-		    	println(" not supported yet");    	
+		    	UtilVerbose.println(VERBOSE, " not supported yet");    	
 			}
 		    throw new RuntimeException("Rest Method '_rest_method = " + restMethod + " is not supported");
 		}
-    	println("POST : routed to uploadBirthdayList");    	
+    	UtilVerbose.println(VERBOSE, "POST : routed to uploadBirthdayList");    	
 		return uploadBirthdayList(user, uploadedInputStream, fileDetail);
 	}
     
@@ -237,7 +223,7 @@ public class Birthdays {
     	String json;  	
 		BirthdayList bl;
     	
-    	println("Upload and Replace (user = " + user + ") with File : " + fileDetail.getFileName());
+    	UtilVerbose.println(VERBOSE, "Upload and Replace (user = " + user + ") with File : " + fileDetail.getFileName());
     	try {
     		bl = BirthdayList.getBirthdaysFromStream(uploadedInputStream, user);
 			BirthdayList.writeBirthdays2File(user, bl);
@@ -267,7 +253,7 @@ public class Birthdays {
 		String ignoredSurname = "\tsurname:\t";
 		String ignoredBirthdate = "\tbirthdate:\t";
     	
-    	println("Upload and Replace (user = " + user + ") with File : " + fileDetail.getFileName());
+    	UtilVerbose.println(VERBOSE, "Upload and Replace (user = " + user + ") with File : " + fileDetail.getFileName());
     	
 		blToMerge = new BirthdayList();
 
@@ -275,7 +261,7 @@ public class Birthdays {
     		reader = new InputStreamReader(uploadedInputStream, "UTF-8");
     		parser = CSVParser.parse(reader, Birthdays.DEFAULT_SEMICOLON);
     		for (String sHeader : parser.getHeaderNames()) {
-    			println("\t" + sHeader, true);    			
+    			UtilVerbose.println(VERBOSE, INFO,  "\t" + sHeader);    			
     		}
     		for (CSVRecord record : parser) {
     			String prename = record.get(2);
@@ -306,11 +292,11 @@ public class Birthdays {
     				} else {
     					date = dateWithYear;
     				}
-    	   			println(record.getRecordNumber() 
+    	   			UtilVerbose.println(VERBOSE, INFO, record.getRecordNumber() 
 					+ "\t" + prename
 					+ "\t" + surname
 					+ "\t" + date
-					, true);	
+					);	
     	   			String[] s = date.split("\\.");
     	   			sDay = s[0];
     	   			sMonth = s[1];
@@ -324,15 +310,15 @@ public class Birthdays {
     	   			blToMerge.getBirthdays().add(p);
     			}	
     		}
-    		println("Uploading CSV for user " + user + " file " + fileDetail.getFileName(), true);
-    		println("Total " + processedRows + " rows processed and " + ignoredRows + " " + ignored, true);
-    		println(ignoredPrename, true);
-    		println(ignoredSurname, true);
-    		println(ignoredBirthdate, true);
+    		UtilVerbose.println(VERBOSE, INFO, "Uploading CSV for user " + user + " file " + fileDetail.getFileName());
+    		UtilVerbose.println(VERBOSE, INFO, "Total " + processedRows + " rows processed and " + ignoredRows + " " + ignored);
+    		UtilVerbose.println(VERBOSE, INFO, ignoredPrename);
+    		UtilVerbose.println(VERBOSE, INFO, ignoredSurname);
+    		UtilVerbose.println(VERBOSE, INFO, ignoredBirthdate);
     		
         	try {
             	File f =  BirthdayList.getFileAndCreateIfNotExists(user);
-            	blAll = BirthdayList.readBirthdaysFromFile2Json(user);
+            	blAll = BirthdayList.readBirthdaysFromFile2Json(f, user);
             	blAll = mergeUpdatedValues(blAll, blToMerge);
     			BirthdayList.writeBirthdays2File(user, blAll);
     		} catch (IOException e1) {
@@ -379,7 +365,7 @@ public class Birthdays {
     		@FormDataParam("file") FormDataContentDisposition fileDetail) {
     	String json;  	
     	
-    	println("Merge (user = " + user + ") with File : " + fileDetail.getFileName());
+    	UtilVerbose.println(VERBOSE, "Merge (user = " + user + ") with File : " + fileDetail.getFileName());
     	
     	BirthdayList blAll;
     	BirthdayList blToMerge;
@@ -401,19 +387,19 @@ public class Birthdays {
 	
 	private BirthdayList mergeUpdatedValues(BirthdayList blAll, BirthdayList blToMerge) {
 		for (BirthDayPerson p : blToMerge.getBirthdays()) {
-			print("\t " + p.toString() + "\t: ");
+			UtilVerbose.print(VERBOSE, "\t " + p.toString() + "\t: ");
 			if (p.getUpdatevalues() != null) {
-				// remove outdated persons 
+				// remove out-dated persons 
 				if (blAll.getBirthdays().remove(p)) { 
-					print("-");
+					UtilVerbose.print(VERBOSE, "-");
 				}
 				p.update();
-				print("u");
+				UtilVerbose.print(VERBOSE, "u");
 			}
 			if (blAll.getBirthdays().add(p)) {
-				print("+");
+				UtilVerbose.print(VERBOSE, "+");
 			};
-			println("");
+			UtilVerbose.println(VERBOSE, "");
 		}
 		
     	return blAll;

@@ -33,8 +33,8 @@ import com.javahelps.jerseydemo.services.MonthConfig;
 @DisplayName("Unit Tests of BirthdayList REST API")
 public class BirthdayListTestBase 
 {
-//	private static final String HTTP_LOCALHOST_8080_JERSEYDEMO_BIRTHDAYS = "http://tomcat:8080/BirthdayList/birthdays";
-	private static final String HTTP_LOCALHOST_8080_JERSEYDEMO_BIRTHDAYS = "http://localhost:8080/jerseydemo/birthdays";
+	private static final String HTTP_LOCALHOST_8080_JERSEYDEMO_BIRTHDAYS = "http://tomcat:8080/BirthdayList/birthdays";
+//	private static final String HTTP_LOCALHOST_8080_JERSEYDEMO_BIRTHDAYS = "http://localhost:8080/jerseydemo/birthdays";
 	protected static boolean VERBOSE = false;
 
 	protected String getUri() {

@@ -33,6 +33,10 @@
             }
         }
 
+        function initServerVersion(){
+            getServerVersion();
+        }
+
         function initLocalStorage(expectedVersion) {
             var currentVersion = localStorage.getItem("version");
             if (currentVersion == null) {
@@ -72,6 +76,7 @@
         function setServerUrl(newServerUrl) {
             localStorage.setItem("serverUrl", newServerUrl);
             document.getElementById('idServerURL').innerHTML = newServerUrl;
+            getServerVersion();
         }
 
         function setServerUrlLocal() {  
@@ -121,6 +126,14 @@
             d2 = parsed_y*10000 + parsed_m*100 + parsed_d;
             d1 = today.getFullYear()*10000 + (today.getMonth()+1)*100 + today.getDate();
             return Math.trunc((d1-d2)/10000);
+        }
+
+        function getServerVersion() {
+            $.getJSON(getServerUrl() + "version", function( data ) {
+                document.getElementById('idServerVersion').innerHTML = "Server Version : " + data.version;
+                document.getElementById('idServerVersionData').innerHTML = "Server Version Data : " + data.versionData;
+                document.getElementById('idServerVersionInfo').innerHTML = "Server Version Info : " + data.versionInfo;
+            });
         }
 
         function prepareMonths() {
@@ -366,6 +379,9 @@
                 <span slot='button_text'>Tomcat Server</span>
             </mflo-button>  
             <p><div id='idServerURL'>fff</div></p>
+            <p><span id='idServerVersion'>Serverversion tbd</span><br/>
+               <span id='idServerVersionData'>Serverversion Data tbd</span><br/>
+               <span id='idServerVersionInfo'>Serverversion Info tbd</span></p>
         </mflo-tabinterface-panel>
 
         <mflo-tabinterface-panel title="Beta">
@@ -405,6 +421,7 @@
         var urlUpload = getServerUrlWithUser();
 
         initLocalStorage("0.2");
+        initServerVersion();
         initUser("frank.loeliger.csv");
 
         prepareMonths();

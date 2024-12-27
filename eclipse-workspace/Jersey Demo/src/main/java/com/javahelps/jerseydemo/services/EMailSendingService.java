@@ -16,17 +16,17 @@ import javax.ws.rs.core.Response;
 
 @Path("/emailsending")
 public class EMailSendingService {
-
+	private static boolean VERBOSE = true;
 
 	private void smtpWaitforAnswer(BufferedReader in) throws IOException {
-		System.out.println("<" + in.readLine());		
+		UtilVerbose.println(VERBOSE, "<" + in.readLine());		
 		while (in.ready()) {
-			System.out.println("<" + in.readLine());		
+			UtilVerbose.println(VERBOSE, "<" + in.readLine());		
 		}		
 	}
 	
 	private void smtpCommandNoWait(PrintWriter out, BufferedReader in, String cmd) throws IOException {
-		System.out.println(">" + cmd);		
+		UtilVerbose.println(VERBOSE, ">" + cmd);		
 		out.println(cmd);
 	}
 	
@@ -47,7 +47,7 @@ public class EMailSendingService {
 			out = new PrintWriter(socket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		} catch (IOException e) {
-			System.out.println("echoPing failed with " + e.toString());
+			UtilVerbose.println(VERBOSE, "echoPing failed with " + e.toString());
 			throw new RuntimeException(e);
 		}
 		
@@ -57,7 +57,7 @@ public class EMailSendingService {
 	        String stringDate = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", new Locale("en", "UK"))
 					.format(new Date());
 	        
-			System.out.println("<" + in.readLine());		
+			UtilVerbose.println(VERBOSE, "<" + in.readLine());		
 			smtpCommand(out, in, "EHLO bluewin.ch"); //  + smtpServer);
 			
 			
@@ -76,7 +76,7 @@ public class EMailSendingService {
 			in.close();
 			socket.close();
 		} catch (IOException e) {
-			System.out.println("sendMsg failed with " + e.toString());
+			UtilVerbose.println(VERBOSE, "sendMsg failed with " + e.toString());
 			throw new RuntimeException(e);
 		}
 
@@ -92,9 +92,8 @@ public class EMailSendingService {
     public Response sendEMail(@PathParam("email") String eMail) {
     	String emailContent = "Hallo Frank, \n Gerne mal wieder bei einem Bier, \n Gruss Markus";
         String output = "Going to Send E-Mail to, " + eMail + "...";
-        System.out.println(output);
-
-        System.out.println("ACHTUNG: MAILFORMAT IST NICHT VERIIFZIERT UND GGF: SPAM ANFAELLIG");
+        UtilVerbose.println(VERBOSE, output);
+        UtilVerbose.println(VERBOSE, "ACHTUNG: MAILFORMAT IST NICHT VERIIFZIERT UND GGF: SPAM ANFAELLIG");
 
         sendMsg("smtpauths.bluewin.ch", 25, eMail, "Testmail", emailContent);
         return Response.status(200).entity(output).build();
