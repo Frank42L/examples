@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class BirthdayVersionInfo {
 	private static final Integer DEFAULT_VERSION_MAJOR = 1;
 	private static final Integer DEFAULT_VERSION_MINOR = 0;
-	private static final Integer DEFAULT_VERSION_REVISION = 6;
+	private static final Integer DEFAULT_VERSION_REVISION = 7;
 	private static final Integer DEFAULT_VERSION_DATA_MAJOR = 1;
 	private static final Integer DEFAULT_VERSION_DATA_MINOR = 0;
 	private static final Integer DEFAULT_VERSION_DATA_REVISION = 0;

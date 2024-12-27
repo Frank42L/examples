@@ -17,7 +17,7 @@ public class UtilVerbose {
 
 	public static void println(boolean VERBOSE, boolean INFO, String s) {
 		if (VERBOSE || INFO) { 
-			System.out.println("XXXXX"+s);
+			System.out.println(s);
 		}
 	}
 }
