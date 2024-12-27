@@ -19,18 +19,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class BirthdayList {
 	private static boolean VERBOSE = false;
-	private static void print(String s) {
-		if (VERBOSE) { 
-			System.out.print(s);
-		}
-	}
-	private static void println(String s) {
-		if (VERBOSE) { 
-			System.out.println(s);
-		}
-	}
-	
-
 	
 	private Set<BirthDayPerson> setBirthDayPersons;
 
@@ -62,7 +50,7 @@ public class BirthdayList {
 	    } catch (Exception ex) {
 		    ex.printStackTrace();
 	    }
-		println("ResultingJSONstring = " + json);
+		UtilVerbose.println(VERBOSE, "ResultingJSONstring = " + json);
 	    return json;		
 	}
 	
@@ -103,10 +91,10 @@ public class BirthdayList {
 	static public BirthdayList readBirthdaysFromFile2Json( File f, final String user ) {
 	    ObjectMapper mapper = new ObjectMapper();
 	    BirthdayList bl = new BirthdayList();
-		print("Username = " + user);
+		UtilVerbose.print(VERBOSE, "Username = " + user);
 	    try {
 	    	bl = mapper.readValue(f, BirthdayList.class);
-			println('\t' + "Einträge = " + bl.getBirthdays().size() + '\t' + "Filename = " + f.getAbsolutePath());
+			UtilVerbose.println(VERBOSE, '\t' + "Einträge = " + bl.getBirthdays().size() + '\t' + "Filename = " + f.getAbsolutePath());
 	    } catch (JsonProcessingException e) {
 		       e.printStackTrace();
 		    } catch (Exception ex) {
@@ -124,12 +112,12 @@ public class BirthdayList {
 	
 	static public File getFileAndCreateIfNotExists( final String user ) throws IOException {
 		String pathname = BirthdayConfig.getServerSideDataDir() + user + ".json";
-		println("Username = " + user);
+		UtilVerbose.println(VERBOSE, "Username = " + user);
 		File f = Paths.get(pathname).toFile();
 			if (f.createNewFile()) {
-				println("File has been created: " + f.getAbsoluteFile()); 
+				UtilVerbose.println(VERBOSE, "File has been created: " + f.getAbsoluteFile()); 
 			} else {
-				println("File already exists: " + f.getAbsoluteFile());			
+				UtilVerbose.println(VERBOSE, "File already exists: " + f.getAbsoluteFile());			
 			}			
  		return f;
 	} 
@@ -143,7 +131,7 @@ public class BirthdayList {
 	    	bis = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 	    	bl = mapper.readValue(bis, BirthdayList.class);
 	    	if (!comment.isBlank()) {
-	    		println('\t' + comment + "\tEinträge = " + bl.getBirthdays().size());
+	    		UtilVerbose.println(VERBOSE, '\t' + comment + "\tEinträge = " + bl.getBirthdays().size());
 	    	}
 	    } catch (JsonProcessingException e) {
 	       e.printStackTrace();
