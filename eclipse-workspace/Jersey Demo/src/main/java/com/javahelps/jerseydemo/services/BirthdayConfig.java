@@ -19,18 +19,6 @@ public class BirthdayConfig {
 	private static final String SERVER_SIDE_DATA_DIR = "G:\\Privat\\Frank\\PRIVAT\\Fingerübungen\\Geburtstagsliste\\data_serverside\\";
 	private static final String SERVER_SIDE_DATA_DIR2 = "/data_serverside/";
 	private static boolean VERBOSE = true;
-	private static void print(String s) {
-		if (VERBOSE) { 
-			System.out.print(s);
-		}
-	}
-	private static void println(String s) {
-		if (VERBOSE) { 
-			System.out.println(s);
-		}
-	}
-	
-
 	
 	private ArrayList<MonthConfig> listMonthConfigs;
 
@@ -54,7 +42,7 @@ public class BirthdayConfig {
 	    } catch (Exception ex) {
 		    ex.printStackTrace();
 	    }
-		println("ResultingJSONstring = " + json);
+		UtilVerbose.println(VERBOSE, "ResultingJSONstring = " + json);
 	    return json;		
 	}
 
@@ -63,12 +51,12 @@ public class BirthdayConfig {
 	    ObjectMapper mapper = new ObjectMapper();
 	    BirthdayConfig config = new BirthdayConfig();
 		String pathname = getServerSideDataDir() + user + ".config.json";
-		println("Configuration for Username = " + user);
+		UtilVerbose.println(VERBOSE, "Configuration for Username = " + user);
 		File f = Paths.get(pathname).toFile();
 	    try {
 			if (f.exists()) {
 		    	config = mapper.readValue(f, BirthdayConfig.class);
-				println('\t' + "Einträge = " + config.getMonths().size() + '\t' + "Filename = " + pathname);
+				UtilVerbose.println(VERBOSE, '\t' + "Einträge = " + config.getMonths().size() + '\t' + "Filename = " + pathname);
 			} 
 	    } catch (JsonProcessingException e) {
 	       e.printStackTrace();
@@ -94,9 +82,7 @@ public class BirthdayConfig {
 	    }			
 	} 
 
-	static public BirthdayConfig readDefaultConfig() {
-	    BirthdayConfig config;
-	    
+	static public BirthdayConfig readDefaultConfig() {    
 		prepareDefaultConfigFile();
 	    // Read Default Config now.
 	    return readConfigFromFile(DEFAULT_CONFIG_NAME);
@@ -118,7 +104,7 @@ public class BirthdayConfig {
 	    	bis = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 	    	config = mapper.readValue(bis, BirthdayConfig.class);
 	    	if (!comment.isBlank()) {
-	    		println('\t' + comment + "\tEinträge = " + config.getMonths().size());
+	    		UtilVerbose.println(VERBOSE, '\t' + comment + "\tEinträge = " + config.getMonths().size());
 	    	}
 	    } catch (JsonProcessingException e) {
 	       e.printStackTrace();
@@ -135,8 +121,8 @@ public class BirthdayConfig {
 		boolean exists = false;
 		File f = Paths.get(pathname).toFile();
 		exists = (f.exists() && f.isDirectory());
-		println("\t try server-side-directory Version 3.1  " + pathname + " : " + exists);
-		// System.err.println("\t try server-side-directory " + pathname + " : " + exists);
+		UtilVerbose.println(VERBOSE, "\t try server-side-directory Version 3.2  " + pathname + " : " + exists);
+		// System.err.UtilVerbose.println(VERBOSE, "\t try server-side-directory " + pathname + " : " + exists);
     	return exists;
 	}
 	

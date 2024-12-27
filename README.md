@@ -5,21 +5,41 @@
 	G:
 	Cd G:\Privat\Frank\PRIVAT\Fingerübungen\airhack_adam_bien\Frank42L-examples\first-steps\src
   Cd G:\Privat\Frank\PRIVAT\Fingerübungen\airhack_adam_bien\Frank42L-examples\geburtstagsliste\src
-	Browser-sync start --server --files "*"
+	  Browser-sync start --server --files "*"
+  
+  falls mit tomcat:
+	  Browser-sync start --server --files --config 'config/browser-sync.js' "*"
+
+    Hinweis: content of browser-sync.js:
+    [...]
+        "server": {
+        baseDir: ["."],
+        middleware: function (req, res, next) {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            next();
+        }
+    },
+    [...]
+         "cors": true,
+
+
 3) Die URL localhost:3000 im Chrome starten (da im IE ohne Massanhem nicht alles unterstützt ist)
 4) msys2 (Bash Shell) - Desktop "Git Bash" oder Mintty in Startleiste
   (Program befindet sich hier: C:\Users\Frank\AppData\Local\Programs\Git\usr\bin\mintty)
   cd /G/Privat/Frank/PRIVAT/Fingerübungen/airhack_adam_bien/Frank42L-examples
 
+  Help for Browser-sync: https://browsersync.io/docs/command-line/
+
+
 # Serverseitig 
-5) http://tomcat:8080/BirthdayList/birthdays/user/frank.loeliger 
+5) cd /G/Privat/Frank/PRIVAT/Fingerübungen/airhack_adam_bien/Frank42L-examples
 6) powershell und SSH zu Development server (keypass)
    (SSH {USERNAME}@192.168.1.119{ENTER}{DELAY 2000}{PASSWORD}{ENTER})
 7) sudo docker exec -it tomcat1 bash
 8) cd logs
 9) tail -f catalina.yyyy-mm-dd.log
 10) Verzeichnis  /tomcat  (Docker) -> /volume1/webservices2/tomcat (NAS)
-11) Export WAR FEil (Jerseydemo) to C:\temp
+11) Export WAR File (Jerseydemo) to C:\temp
 12) tomcat:8080/manager/html INstallieren WAR Datei
 
 
@@ -38,6 +58,30 @@ eclipse starten
 https://maven.apache.org/guides/getting-started/index.html#How_do_I_setup_Maven
 - https://repo.maven.apache.org/maven2/.
 - /maven2/log4j/log4j.
+
+# Eclipse Build an Deploy Birthdaylist to NAS einrichten
+- Maven Build configuration
+  Base Directory : ${project_loc:Jersey Demo}
+  Goals : tomcat:redeploy
+  Profiles: tomcat-remotehost
+  User Settings: C:\Users\frank\.m2\settings.xml
+- Content of settings.xml
+    <?xml version="1.0" encoding="UTF-8"?>
+    <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+      <servers>
+        <server>
+            <id>localhost</id>
+            <username>tomcatdeploy</username>
+            <password>not-yet-used</password>
+        </server>
+        <server>
+            <id>tomcat</id>
+            <username>tomcatdeploy</username>
+            <password>pwd</password>
+        </server>
+      </servers>
+    </settings>
 
 # Tomcat (Falls keine Entwicklung)
 Start mit
@@ -62,7 +106,20 @@ http://localhost:8080/jerseydemo/emailsending/mail@frank.loeliger.name
 Ersatz der aller Geburtstage: POST http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.test mit JSON File
 Hinzufügen falls noch nicht drin: PATCH http://localhost:8080/jerseydemo/birthdays/user/frank.loeliger.test mit JSON File
 
-  
+
+http://tomcat:8080/jerseydemo/sayhello/frank
+http://tomcat:8080/jerseydemo/birthdays/user/frank.loeliger
+http://tomcat:8080/jerseydemo/birthdays/user/irene.troxler
+http://tomcat:8080/jerseydemo/birthdays/user/frank.loeliger/Loeliger/Frank
+http://tomcat:8080/jerseydemo/birthdays/user/frank.loeliger/Muster/Hans
+http://tomcat:8080/jerseydemo/birthdays/users/Muster/Hans?user=frank.loeliger&user=irene.troxler
+
+http://tomcat:8080/jerseydemo/emailverification/frank.loeliger@bluewin.ch
+http://tomcat:8080/jerseydemo/emailsending/mail@frank.loeliger.name
+
+Ersatz der aller Geburtstage: POST http://tomcat:8080/jerseydemo/birthdays/user/frank.loeliger.test mit JSON File
+Hinzufügen falls noch nicht drin: PATCH http://tomcat:8080/jerseydemo/birthdays/user/frank.loeliger.test mit JSON File
+
 # examples GIT
 Eigene Beispiele auf Github
 - erster Schritt - Gehversuche mit Git
@@ -210,6 +267,31 @@ UM MIT BRANCHES Arbeiten zu können :
           chmod 644 host-manager.xml
           catalina.sh stop    [stopped aber auch gleich den Container, der dann automatisch neu gestartet wird]
 
+    - Set CORS to allow other servers to use Servlet
+      - cd /volume1/webservices2/tomcat
+      - sudo docker cp tomcat1:/usr/local/tomcat/conf/web.xml .
+      - cp web.xml web1.xml; rm web.xml; mv web1.xml web.xml
+      - vi web.xml
+          <!-- Added Filter along folowinf article   -->
+          <!-- https://stackoverflow.com/questions/16296145/set-cors-header-in-tomcat/18850438#18850438 -->
+          <filter>
+            <filter-name>CorsFilter</filter-name>
+            <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+            <init-param>
+              <param-name>cors.allowed.origins</param-name>
+              <param-value>http:/*</param-value>
+            </init-param>
+          </filter>
+          <filter-mapping>
+            <filter-name>CorsFilter</filter-name>
+            <url-pattern>/*</url-pattern>
+          </filter-mapping>
+      - sudo docker cp ./web.xml tomcat1:/usr/local/tomcat/conf
+      - sudo docker exec -it tomcat1 bash
+          cd /usr/local/tomcat/conf; ls -la web.xml; chown root:root web.xml; chmod 644 web.xml; ls -la web.xml; catalina.sh stop
+          [stopped aber auch gleich den Container, der dann automatisch neu gestartet wird]
+
+
     - Servlet "BirthdayList" gegen aussen sichtbar machen
       - cd /volume1/webservices2/tomcat
       - sudo docker cp tomcat1:/usr/local/tomcat/webapps/BirthdayList/META-INF/BirthdayList.xml  .
@@ -238,6 +320,15 @@ UM MIT BRANCHES Arbeiten zu können :
                     -v /tmp/context.xml:/tmp/context.xml \
                     tomcat:9.0 \
                     /bin/bash -c "mv /usr/local/tomcat/webapps /usr/local/tomcat/webapps2; mv /usr/local/tomcat/webapps.dist /usr/local/tomcat/webapps; cp /tmp/context.xml /usr/local/tomcat/webapps/manager/META-INF/context.xml; catalina.sh run"
+
+                  Beim wiederholten Aufruf
+                  sudo docker run \
+                    --name tomcat \
+                    -it \
+                    -p 8080:8080 \
+                    tomcat:9.0 \
+                    /bin/bash -c "catalina.sh run"
+
         Variante B: Configure in DS220+ (not clear how to change the standard command in DS220+ yet)
                     Or replace "catalina.sh run" by "mv /usr/local/tomcat/webapps /usr/local/tomcat/webapps2; mv /usr/local/tomcat/webapps.dist /usr/local/tomcat/webapps; cp /tmp/context.xml /usr/local/tomcat/w
                     webapps/manager/META-INF/context.xml; catalina.sh run"
@@ -250,8 +341,20 @@ UM MIT BRANCHES Arbeiten zu können :
                 catalina.sh start
 
           
+  - Check zugang from wothin docker (Wenn das geht, dann fehlt "einfach" der Zugang von aussen auf Docker)
+      - sudo docker exec -it tomcat1 bash
+      - curl localhost:8080
+      - curl localhost:8080/manager/html
+      - curl localhost:8080/host-manager/html
+      Dann auf NAS
+      - curl 172.17.0.2:8080
+      - curl 172.17.0.2:8080/manager/html
+      - curl 172.17.0.2:8080/host-manager/html
+    Falls es nicht erreichbar ist:
+      - Ip (192.168.1.119) Adresse in Firewall (Zonealarm) hinzufügen
+      - NAS webportal: tomcat1 (port:8080) dem tomcat aktivieren
 
-  - Nutzen der Admin Consolen von tomcat
+  - Nutzen der Admin Consolen von tomcat (20241222: statt tomvat momentan franktest)
     - http://tomcat:8080                      [tomcat test page]
     - http://tomcat:8080/manager/html         [tomcat manager webapp]
     - http://tomcat:8080/host-manager/html    [tomcat host-manager webapp]

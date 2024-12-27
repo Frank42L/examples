@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.function.BooleanSupplier;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -19,23 +18,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class BirthdayVersionInfo {
 	private static final Integer DEFAULT_VERSION_MAJOR = 1;
 	private static final Integer DEFAULT_VERSION_MINOR = 0;
-	private static final Integer DEFAULT_VERSION_REVISION = 1;
+	private static final Integer DEFAULT_VERSION_REVISION = 6;
 	private static final Integer DEFAULT_VERSION_DATA_MAJOR = 1;
 	private static final Integer DEFAULT_VERSION_DATA_MINOR = 0;
 	private static final Integer DEFAULT_VERSION_DATA_REVISION = 0;
 	private static final String DEFAULT_VERSION_DESCRIPTION = "Alpha Release, Not stable";
 	
 	private static boolean VERBOSE = true;
-	private static void print(String s) {
-		if (VERBOSE) { 
-			System.out.print(s);
-		}
-	}
-	private static void println(String s) {
-		if (VERBOSE) { 
-			System.out.println(s);
-		}
-	}
 	
 	private Integer versionCodeMajor = DEFAULT_VERSION_MAJOR;
 	private Integer versionCodeMinor = DEFAULT_VERSION_MINOR;
@@ -56,24 +45,24 @@ public class BirthdayVersionInfo {
 	};
 */
     
-
-	public String formatVersionInfo() {
-		return versionDescription + " [version=" +
-				versionCodeMajor + "." +
-				versionCodeMinor + "." +
-				versionCodeRevision + " - dataversion=" +
-				versionDataMajor + "." +
-				versionDataMinor + "." +
-				versionDataRevision + "]";				
+	public String getVersion() {
+		return versionCodeMajor + "." + versionCodeMinor + "." + versionCodeRevision;
 	}
-	
+
+	public String getVersionData() {
+		return versionDataMajor + "." + versionDataMinor + "." + versionDataRevision;
+	}
+
+	public String getVersionInfo() {
+		return versionDescription + " [version=" + getVersion() + " - dataversion=" + getVersionData() + "]";				
+	}
+
     @GET
     @Path("/version")
     @Produces("text/plain")
     @JsonIgnore
-    public Response getVersionInfo() {
+    public Response versionInfo() {
     	String json;
-    	println(formatVersionInfo());
     	json = toJson();
     	return Response.ok() // 200
         		.entity(json)
@@ -90,7 +79,7 @@ public class BirthdayVersionInfo {
 	    } catch (Exception ex) {
 		    ex.printStackTrace();
 	    }
-		println("ResultingJSONstring = " + json);
+		UtilVerbose.println(VERBOSE, "ResultingJSONstring = " + json);
 	    return json;		
 	}
 
@@ -103,7 +92,7 @@ public class BirthdayVersionInfo {
 	    	bis = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 	    	versionInfo = mapper.readValue(bis, BirthdayVersionInfo.class);
 	    	if (!comment.isBlank()) {
-	    		println('\t' + comment + "\tVersion = " + versionInfo.formatVersionInfo() );
+	    		UtilVerbose.println(VERBOSE, '\t' + comment + "\tVersion = " + versionInfo.getVersionInfo() );
 	    	}
 	    } catch (JsonProcessingException e) {
 	       e.printStackTrace();

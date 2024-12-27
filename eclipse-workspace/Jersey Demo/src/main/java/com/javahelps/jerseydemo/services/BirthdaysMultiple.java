@@ -16,11 +16,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Path("/birthdays/users")
 public class BirthdaysMultiple {
 	private static boolean VERBOSE = false;
-	private static void println(String s) {
-		if (VERBOSE) { 
-			System.out.println(s);
-		}
-	}
 
 	private BirthdayList readBirthdaysFromFile2Json( final Set<String> users ) {
 		Iterator<String> iter = users.iterator();
@@ -30,7 +25,7 @@ public class BirthdaysMultiple {
 		{
 			bl.insert(BirthdayList.readBirthdaysFromFile2Json(iter.next()));
 		}
-		println("Resultat Einträge nach Duplikaterkennung = " + bl.getBirthdays().size());
+		UtilVerbose.println(VERBOSE, "Resultat Einträge nach Duplikaterkennung = " + bl.getBirthdays().size());
 		return bl;
 	}
 	
@@ -43,7 +38,7 @@ public class BirthdaysMultiple {
         try {
         	bl = readBirthdaysFromFile2Json(users);
     		json = mapper.writeValueAsString(bl);    		
-    		System.out.println("ResultingJSONstring = " + json);
+    		UtilVerbose.println(VERBOSE, "ResultingJSONstring = " + json);
         } catch (Exception ex) {
     	    ex.printStackTrace();
         }

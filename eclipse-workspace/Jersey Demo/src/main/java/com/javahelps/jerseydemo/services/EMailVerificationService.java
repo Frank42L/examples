@@ -14,17 +14,17 @@ import javax.ws.rs.core.Response;
 
 @Path("/emailverification")
 public class EMailVerificationService {
-
+	private static boolean VERBOSE = true;
 
 	private void smtpWaitforAnswer(BufferedReader in) throws IOException {
-		System.out.println("<" + in.readLine());		
+		UtilVerbose.println(VERBOSE, "<" + in.readLine());		
 		while (in.ready()) {
-			System.out.println("<" + in.readLine());		
+			UtilVerbose.println(VERBOSE, "<" + in.readLine());		
 		}		
 	}
 	
 	private void smtpCommand(PrintWriter out, BufferedReader in, String cmd) throws IOException {
-		System.out.println(">" + cmd);		
+		UtilVerbose.println(VERBOSE, ">" + cmd);		
 		out.println(cmd);
 		smtpWaitforAnswer(in);
 	}
@@ -41,21 +41,21 @@ public class EMailVerificationService {
 			out = new PrintWriter(socket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		} catch (IOException e) {
-			System.out.println("echoPing failed with " + e.toString());
+			UtilVerbose.println(VERBOSE, "echoPing failed with " + e.toString());
 			throw new RuntimeException(e);
 		}
 		
 		
 		try {
 			// smtpWaitforAnswer(in);
-			System.out.println("<" + in.readLine());		
+			UtilVerbose.println(VERBOSE, "<" + in.readLine());		
 			smtpCommand(out, in, "EHLO bluewin.ch"); //  + smtpServer);
 			smtpCommand(out, in, "QUIT");
 			out.close();
 			in.close();
 			socket.close();
 		} catch (IOException e) {
-			System.out.println("echoPing failed with " + e.toString());
+			UtilVerbose.println(VERBOSE, "echoPing failed with " + e.toString());
 			throw new RuntimeException(e);
 		}
 
@@ -70,11 +70,11 @@ public class EMailVerificationService {
     @Path("/{email}")
     public Response verifyEMail(@PathParam("email") String eMail) {
         String output = "Going to Verify E-Mail , " + eMail + "...";
-        System.out.println(output);
-        System.out.println("Going to open a socket to Mailserver");
+        UtilVerbose.println(VERBOSE, output);
+        UtilVerbose.println(VERBOSE, "Going to open a socket to Mailserver");
         // echoPing("smtp.bluewin.ch", 25);
         echoPing("smtpauths.bluewin.ch", 25);
-        System.out.println("Socket was possible, but we did not do a E-Mail Verification yet");
+        UtilVerbose.println(VERBOSE, "Socket was possible, but we did not do a E-Mail Verification yet");
         return Response.status(200).entity(output).build();
     }
 

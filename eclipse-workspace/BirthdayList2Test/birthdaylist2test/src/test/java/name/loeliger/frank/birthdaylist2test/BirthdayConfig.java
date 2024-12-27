@@ -51,8 +51,8 @@ class BirthdayConfigTest extends BirthdayListTestBase {
 	void testGetVersionInfo() {
 		BirthdayVersionInfo localVersion = new BirthdayVersionInfo();
         BirthdayVersionInfo serverVersion = restCallGetVersionInfo(getUriVersion(), "");
-    	printInfo("Local       Version = " + serverVersion.formatVersionInfo(), true);
-    	printInfo("Server Side Version = " + serverVersion.formatVersionInfo(), true);
+    	printInfo("Local       Version = " + localVersion.getVersionInfo(), true);
+    	printInfo("Server Side Version = " + serverVersion.getVersionInfo(), true);
     	assertTrue(serverVersion.compatibleWith(1, 0, 1));
     	assertTrue(serverVersion.compatibleWith(1, 1, 3));
     	assertFalse(serverVersion.compatibleWith(2, 0, 1));
